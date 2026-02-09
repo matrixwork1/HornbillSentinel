@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stormevades1031/fyp.git"
+    "url": "git+https://github.com/stormevades1031/fyp2.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/stormevades1031/fyp/issues"
+    "url": "https://github.com/stormevades1031/fyp2/issues"
   },
-  "homepage": "https://github.com/stormevades1031/fyp#readme",
+  "homepage": "https://github.com/stormevades1031/fyp2#readme",
   "dependencies": {
     "argon2": "^0.44.0",
     "bcrypt": "^6.0.0",

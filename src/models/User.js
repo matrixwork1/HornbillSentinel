@@ -138,7 +138,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 // Virtual for checking if account is locked
-UserSchema.virtual('isLocked').get(function() {
+UserSchema.virtual('isLocked').get(function () {
   return !!(this.lockUntil && this.lockUntil > Date.now());
 });
 
@@ -147,9 +147,9 @@ const MAX_LOGIN_ATTEMPTS = parseInt(process.env.MAX_LOGIN_ATTEMPTS) || 5;
 const LOCK_TIME = parseInt(process.env.LOCK_TIME) || 2 * 60 * 60 * 1000; // 2 hours
 
 // Pre-save middleware to hash password
-UserSchema.pre('save', async function(next) {
+UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-  
+
   try {
     // Store previous password hash if password is being changed (not on creation)
     if (!this.isNew && this.password) {
@@ -159,18 +159,18 @@ UserSchema.pre('save', async function(next) {
         this.previousPasswordHash = currentUser.password;
       }
     }
-    
+
     // Use Argon2id for password hashing
     this.password = await argon2.hash(this.password, {
       type: argon2.argon2id,
-      memoryCost: 2**16, // 64 MiB
+      memoryCost: 2 ** 16, // 64 MiB
       timeCost: 3,       // 3 iterations
       parallelism: 1     // 1 degree of parallelism
     });
-    
+
     // Update password changed date
     this.passwordChangedAt = new Date();
-    
+
     next();
   } catch (error) {
     next(error);
@@ -178,12 +178,12 @@ UserSchema.pre('save', async function(next) {
 });
 
 // Method to compare passwords - supports both argon2 and bcrypt for backward compatibility
-UserSchema.methods.comparePassword = async function(candidatePassword) {
+UserSchema.methods.comparePassword = async function (candidatePassword) {
   try {
     // Check if the hash is Argon2 (starts with $argon2)
     if (this.password.startsWith('$argon2')) {
       return await argon2.verify(this.password, candidatePassword);
-    } 
+    }
     // Fallback to bcrypt for backward compatibility
     else {
       return await bcrypt.compare(candidatePassword, this.password);
@@ -194,13 +194,13 @@ UserSchema.methods.comparePassword = async function(candidatePassword) {
 };
 
 // Method to check if provided password matches previous password
-UserSchema.methods.compareWithPreviousPassword = async function(candidatePassword) {
+UserSchema.methods.compareWithPreviousPassword = async function (candidatePassword) {
   if (!this.previousPasswordHash) return false;
   try {
     // Check if the hash is Argon2 (starts with $argon2)
     if (this.previousPasswordHash.startsWith('$argon2')) {
       return await argon2.verify(this.previousPasswordHash, candidatePassword);
-    } 
+    }
     // Fallback to bcrypt for backward compatibility
     else {
       return await bcrypt.compare(candidatePassword, this.previousPasswordHash);
@@ -211,7 +211,7 @@ UserSchema.methods.compareWithPreviousPassword = async function(candidatePasswor
 };
 
 // Method to handle failed login attempts
-UserSchema.methods.incLoginAttempts = function() {
+UserSchema.methods.incLoginAttempts = function () {
   // If we have a previous lock that has expired, restart at 1
   if (this.lockUntil && this.lockUntil < Date.now()) {
     return this.updateOne({
@@ -219,27 +219,27 @@ UserSchema.methods.incLoginAttempts = function() {
       $set: { loginAttempts: 1 }
     });
   }
-  
+
   const updates = { $inc: { loginAttempts: 1 } };
-  
+
   // Lock the account if we've reached max attempts and it's not locked already
   if (this.loginAttempts + 1 >= MAX_LOGIN_ATTEMPTS && !this.isLocked) {
     updates.$set = {
       lockUntil: Date.now() + LOCK_TIME
     };
   }
-  
+
   return this.updateOne(updates);
 };
 
 // Method to update last login
-UserSchema.methods.updateLastLogin = function() {
+UserSchema.methods.updateLastLogin = function () {
   return this.updateOne({ lastLogin: new Date() });
 };
 
 // Method to generate OTP
-UserSchema.methods.generateOTP = function() {
-  const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+UserSchema.methods.generateOTP = function () {
+  const otp = crypto.randomInt(100000, 1000000).toString(); // 6-digit cryptographically secure OTP
   this.otpCode = otp;
   this.otpExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes
   this.otpAttempts = 0;
@@ -247,61 +247,61 @@ UserSchema.methods.generateOTP = function() {
 };
 
 // Method to verify OTP
-UserSchema.methods.verifyOTP = function(inputOTP) {
+UserSchema.methods.verifyOTP = function (inputOTP) {
   if (!this.otpCode || !this.otpExpiry) {
     return { valid: false, message: 'No OTP found' };
   }
-  
+
   if (Date.now() > this.otpExpiry) {
     return { valid: false, message: 'OTP has expired' };
   }
-  
+
   if (this.otpAttempts >= 3) {
     return { valid: false, message: 'Too many OTP attempts' };
   }
-  
+
   if (this.otpCode !== inputOTP) {
     this.otpAttempts += 1;
     return { valid: false, message: 'Invalid OTP' };
   }
-  
+
   return { valid: true, message: 'OTP verified successfully' };
 };
 
 // Method to clear OTP
-UserSchema.methods.clearOTP = function() {
+UserSchema.methods.clearOTP = function () {
   this.otpCode = undefined;
   this.otpExpiry = undefined;
   this.otpAttempts = 0;
 };
 
 // Add the missing generateResetToken method
-UserSchema.methods.generateResetToken = function() {
+UserSchema.methods.generateResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
-  
+
   // Hash the token before storing in database
   this.resetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
   this.resetTokenExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes
-  
+
   // Return the plain token (not hashed) to send to user
   return resetToken;
 };
 
 // Method to check if password was recently changed
-UserSchema.methods.wasPasswordRecentlyChanged = function() {
+UserSchema.methods.wasPasswordRecentlyChanged = function () {
   if (!this.passwordChangedAt) return false;
   const daysSinceChange = Math.floor((Date.now() - this.passwordChangedAt.getTime()) / (1000 * 60 * 60 * 24));
   return daysSinceChange <= 30; // Consider "recent" if changed within 30 days
 };
 
 // Method to check if provided password matches previous password
-UserSchema.methods.compareWithPreviousPassword = async function(candidatePassword) {
+UserSchema.methods.compareWithPreviousPassword = async function (candidatePassword) {
   if (!this.previousPasswordHash) return false;
   try {
     // Check if the hash is Argon2 (starts with $argon2)
     if (this.previousPasswordHash.startsWith('$argon2')) {
       return await argon2.verify(this.previousPasswordHash, candidatePassword);
-    } 
+    }
     // Fallback to bcrypt for backward compatibility
     else {
       return await bcrypt.compare(candidatePassword, this.previousPasswordHash);
@@ -316,7 +316,7 @@ UserSchema.index({ resetToken: 1 });
 UserSchema.index({ lockUntil: 1 });
 
 // Add this method to UserSchema.methods
-UserSchema.methods.incrementTokenVersion = async function() {
+UserSchema.methods.incrementTokenVersion = async function () {
   this.tokenVersion += 1;
   await this.save();
   return this.tokenVersion;

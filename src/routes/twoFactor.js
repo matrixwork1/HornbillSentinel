@@ -90,16 +90,14 @@ router.post('/verify-setup', authenticateToken, twoFactorLimit, validate(twoFact
 // Verify 2FA during login
 router.post('/verify', twoFactorLimit, async (req, res) => {
   try {
-    console.log('2FA Verify Request Body:', JSON.stringify(req.body, null, 2));
-    
+
     const { userId, token, method } = req.body;
-    
+
     // Basic validation - check if all required fields are present
     if (!userId || !token || !method) {
-      console.log('Missing required fields:', { userId: !!userId, token: !!token, method: !!method });
       return res.status(400).json({ error: 'Missing required fields' });
     }
-    
+
     // Custom validation for different methods
     if (method === 'backup') {
       if (token.length < 8 || token.length > 12) {
@@ -108,13 +106,11 @@ router.post('/verify', twoFactorLimit, async (req, res) => {
     } else if (method === 'email') {
       // Clean and validate the token for email OTP
       const cleanToken = token.toString().trim();
-      console.log('Email OTP validation - Clean token:', cleanToken, 'length:', cleanToken.length);
-      
+
       if (!/^\d{6}$/.test(cleanToken)) {
-        console.log('Email OTP validation failed. Token does not match 6-digit pattern.');
         return res.status(400).json({ error: 'Email OTP must be exactly 6 digits' });
       }
-      
+
       // Update the token in the request body
       req.body.token = cleanToken;
     } else if (method === 'totp') {
@@ -122,15 +118,15 @@ router.post('/verify', twoFactorLimit, async (req, res) => {
       const validation = twoFactorTokenSchema.safeParse(req.body);
       if (!validation.success) {
         console.log('TOTP validation failed:', validation.error.errors);
-        return res.status(400).json({ 
-          error: 'Validation failed', 
-          details: validation.error.errors 
+        return res.status(400).json({
+          error: 'Validation failed',
+          details: validation.error.errors
         });
       }
     } else {
       return res.status(400).json({ error: 'Invalid verification method' });
     }
-    
+
     const user = await User.findById(userId);
     const ipAddress = req.ip || req.connection.remoteAddress;
 
@@ -147,7 +143,7 @@ router.post('/verify', twoFactorLimit, async (req, res) => {
       // const freshUser = await User.findById(userId);
       // console.log('Fresh user emailOTP:', freshUser ? freshUser.emailOTP : 'No user');
       // console.log('Fresh user emailOTPExpiry:', freshUser ? freshUser.emailOTPExpiry : 'No user');
-      
+
       if (user.emailOTP && user.emailOTPExpiry > new Date()) {
         const hashedInputOTP = EmailOTPUtils.hashOTP(token);
         // Remove these debug lines:
@@ -157,30 +153,20 @@ router.post('/verify', twoFactorLimit, async (req, res) => {
         // console.log('- Stored hash:', user.emailOTP);
         // console.log('- Expiry:', user.emailOTPExpiry);
         // console.log('- Current time:', new Date());
-        // console.log('- Hash match:', hashedInputOTP === user.emailOTP);
-        
+
         if (hashedInputOTP === user.emailOTP) {
           isValid = true;
           user.emailOTP = undefined;
           user.emailOTPExpiry = undefined;
           user.emailOTPAttempts = 0;
-          console.log('Email OTP verification successful');
         } else {
-          console.log('Email OTP verification failed - hash mismatch');
           user.emailOTPAttempts = (user.emailOTPAttempts || 0) + 1;
           if (user.emailOTPAttempts >= 3) {
             user.emailOTP = undefined;
             user.emailOTPExpiry = undefined;
             user.emailOTPAttempts = 0;
-            console.log('Email OTP cleared due to too many attempts');
           }
         }
-      } else {
-        console.log('Email OTP Debug - Invalid state:');
-        console.log('- Has emailOTP:', !!user.emailOTP);
-        console.log('- Expiry:', user.emailOTP ? user.emailOTPExpiry : 'No OTP');
-        console.log('- Current time:', new Date());
-        console.log('- Is expired:', user.emailOTPExpiry ? user.emailOTPExpiry <= new Date() : 'No expiry');
       }
     } else if (method === 'backup') {
       // Verify backup code
@@ -203,11 +189,11 @@ router.post('/verify', twoFactorLimit, async (req, res) => {
       // Complete the login process
       const accessToken = generateAccessToken(user);
       const refreshToken = await generateRefreshToken(user, ipAddress);
-      
+
       setAuthCookies(res, accessToken, refreshToken);
-      
-      res.json({ 
-        success: true, 
+
+      res.json({
+        success: true,
         message: '2FA verification successful',
         user: {
           id: user._id,
@@ -310,7 +296,7 @@ router.post('/send-email-otp', twoFactorLimit, async (req, res) => {
     const success = await EmailOTPUtils.sendOTPEmail(user.email, otp, 'login');
     // Remove this debug line:
     // console.log('Email send result:', success);
-    
+
     if (!success) {
       // Remove this debug line:
       // console.log('Failed to send email');
@@ -330,7 +316,7 @@ router.post('/send-email-otp', twoFactorLimit, async (req, res) => {
 router.post('/disable', authenticateToken, validate(twoFactorDisableSchema), async (req, res) => {
   try {
     const { password } = req.body;
-    
+
     if (!password) {
       return res.status(400).json({ error: 'Password is required to disable 2FA' });
     }

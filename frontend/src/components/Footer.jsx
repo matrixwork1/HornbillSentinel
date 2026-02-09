@@ -5,7 +5,7 @@ import './Footer.css';
 
 const Footer = () => {
   const { isAuthenticated } = useAuth();
-  
+
   return (
     <footer className="site-footer">
       <div className="footer-container">
@@ -28,7 +28,7 @@ const Footer = () => {
             )}
           </ul>
         </div>
-        
+
         <div className="footer-section">
           <h3>Social Media</h3>
           <div className="social-links">
@@ -46,17 +46,17 @@ const Footer = () => {
             </a>
           </div>
         </div>
-        
+
         <div className="footer-section">
           <h3>Contact Us</h3>
           <address>
-            <p><i className="fas fa-map-marker-alt"></i> 123 Security Street, Digital City</p>
-            <p><i className="fas fa-phone"></i> +1 (555) 123-4567</p>
-            <p><i className="fas fa-envelope"></i> info@digitaltypeassessment.com</p>
+            <p><i className="fas fa-map-marker-alt"></i> University of Technology Sarawak, No. 1, Jalan University, 96000 Sibu, Sarawak</p>
+            <p><i className="fas fa-phone"></i> +60 84-367 300</p>
+            <p><i className="fas fa-envelope"></i> enquiry@uts.edu.my</p>
           </address>
         </div>
       </div>
-      
+
       <div className="footer-bottom">
         <p>&copy; {new Date().getFullYear()} HornbillSentinel. All rights reserved.</p>
       </div>

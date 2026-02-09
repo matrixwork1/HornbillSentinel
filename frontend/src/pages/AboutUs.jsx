@@ -41,8 +41,8 @@ const AboutUs = () => {
             <h3>Mr. Tristan Lo</h3>
             <p className="team-title">{t('role_founder')}</p>
             <p>
-              BSc (Hons) Computer Science candidate at UTS, Tristan spearheads the research
-              and platform architecture.
+              BSc (Hons) Computer Science graduate from UTS, Mr. Tristan spearheads the research
+              and full stack development of the platform architecture.
             </p>
           </div>
 
@@ -57,24 +57,13 @@ const AboutUs = () => {
             </p>
           </div>
 
-          {/* UX Designer */}
-          <div className="team-member">
-            <div className="team-member-image image-emily"></div>
-            <h3>Mr. Patrick Yung</h3>
-            <p className="team-title">{t('role_project_lead')}</p>
-            <p>
-              Mr. Patrick is in charge of overseeing key aspects of HornbillSentinel, as well
-              as future improvements that can be made to the platform.
-            </p>
-          </div>
-
           <div className="team-member">
             <div className="team-member-image image-dicky"></div>
             <h3>Mr. Dicky Teo</h3>
             <p className="team-title">{t('role_backend')}</p>
             <p>
-              Dicky focuses on server‑side architecture, APIs, and data models powering the assessment
-              and scoring engine.
+              Mr. Dicky focuses on the constant remodelling of the questionnaire contents to
+              keep up with the latest research evidence in human-centric cybersecurity.
             </p>
           </div>
         </div>

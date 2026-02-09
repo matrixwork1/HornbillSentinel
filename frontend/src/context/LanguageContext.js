@@ -16,7 +16,7 @@ const dictionary = {
     nav_register: 'Register',
     nav_logout: 'Logout',
     hero_title: 'Digital Type Assessment',
-    hero_sub: 'Discover your digital security profile and get personalized recommendations to protect your online presence in today\'s cyber landscape',
+    hero_sub: 'Transforming Cybersecurity Awareness Through Personalized Profiling',
     btn_start_assessment: 'Start Assessment',
     card_title: "What's Your Digital Type?",
     card_body: 'Are you a Careless Clicker, Password Reuser, Update Avoider, Oversharer, or Security Savvy? Take our assessment to find out!',
@@ -175,12 +175,12 @@ const dictionary = {
     about_title: 'About Hornbill Sentinel',
     about_subtitle: 'Digital Type Assessment & Profile Generation System for Cybersecurity Awareness in Malaysia',
     about_mission_title: 'Our Mission',
-    about_mission_body: 'To empower Malaysians—especially Sarawakians—to recognize and mitigate cybersecurity hygiene risks through personalized Digital Type assessments, insightful profiles, and actionable recommendations.',
+    about_mission_body: 'To empower Malaysians to recognize and mitigate cybersecurity hygiene risks through personalized Digital Type assessments, insightful profiles, and actionable recommendations.',
     about_story_title: 'Our Story',
-    about_story_body: 'Born in early 2025 as a Final Year Project at the University of Technology Sarawak, Hornbill Sentinel sprang from the understanding that human error is often the weakest link in cybersecurity. Under the guidance of Ts. Dr. Gary Loh, Tristan designed a system that turns behavioural insights into lasting security improvements.',
+    about_story_body: 'Born in early 2025 as a student Final Year Project at the University of Technology Sarawak, Hornbill Sentinel sprang from the understanding that human error is often the weakest link in cybersecurity. Under the guidance of Ts. Dr. Gary Loh, Tristan designed a system that turns behavioural insights into lasting security improvements.',
     about_approach_title: 'Our Approach',
-    about_approach_body1: 'Grounded in Protection Motivation Theory and aligned with the NIST Cybersecurity Framework 2.0, our platform analyzes not cybersecurity hygiene habits, but patterns of risky behaviours to classify you into one of five “Digital Types.” We then deliver tailored advice to boost your perceived vulnerability, response efficacy, and self-efficacy.',
-    about_approach_body2: 'Continuous refinement—driven by the latest academic research and real user feedback—ensures Hornbill Sentinel stays on the cutting edge of human-centred cybersecurity awareness.',
+    about_approach_body1: 'Grounded in Protection Motivation Theory with a questionnaire aligned with the latest research evidence in human-centric cybersecurity, our platform analyzes not only enforces demographic-based profiling, but also patterns of risky behaviours to classify you into one of five “Digital Types.” We then deliver tailored advice to boost your perceived vulnerability, response efficacy, and self-efficacy.',
+    about_approach_body2: 'Continuous refinement driven by the latest academic research ensures Hornbill Sentinel stays on the cutting edge of human-centric cybersecurity awareness.',
     about_team_title: 'Our Team',
     role_founder: 'Founder & Lead Researcher',
     role_supervisor: 'Supervisor & Technical Advisor',
@@ -866,57 +866,57 @@ const questionDict = {
       text: '有人自称IT需要你现在提供密码进行“服务器迁移”。',
       options: { give_password_now: '提供密码', verify_helpdesk: '挂断并致电官方服务台核实', prove_identity: '要求其证明身份' }
     }
-    ,SOC_E_2: { text: '什么是“尾随进入”（物理安全）？' }
-    ,SOC_M_1: { text: '为何社交媒体上的“趣味问答”存在风险？' }
-    ,SOC_M_2: { text: '收到一位陌生漂亮人士的好友请求。' }
-    ,SOC_M_3: { text: '社会工程主要依赖于……' }
-    ,SOC_H_2: { text: '为何在社交媒体发布登机牌照片存在风险？' }
-    ,SOC_H_3: { text: '什么是“等价交换”（Quid Pro Quo）？' }
-    ,MAL_E_1: { text: '弹窗提示你的电脑感染了5个病毒；点击进行扫描。' }
-    ,MAL_X_1: { text: "你检测到某工作站向已知C2服务器发出“Beacon”，但EDR未告警。你的第一步是什么？" }
-    ,SCAM_E_3: { text: '网游中有人承诺只要提供登录信息就送你“免费”稀有物品。这是：' }
-    ,SCAM_M_1: { text: "来自‘Pos Laju’的短信，附.apk用于重新安排投递。" }
-    ,SCAM_M_3: { text: "来自‘Sarawak Energy’的来电：1小时内将断电，除非电话支付账单。" }
-    ,SCAM_H_2: { text: '为何短信中的.apk应用如此危险？' }
-    ,SCAM_H_3: { text: '在Marketplace购买二手物品时，卖家经常……' }
-    ,PHISH_H_2: { text: '什么是“Vishing”（语音钓鱼）？' }
-    ,PHISH_H_3: { text: '什么是“同形异义域名”（Punycode）攻击？' }
-    ,PHISH_M_2: { text: '钓鱼邮件的主要目标是什么？' }
-    ,PHISH_H_1: { text: '这是一封高度个性化并提到你工作的邮件，这是：' }
-    ,PHISH_H_4: { text: '绿色锁图标（SSL）表示什么？' }
-    ,PASS_E_1: { text: '哪一个是最安全的密码？' }
-    ,PASS_E_2: { text: '你如何管理你的密码？' }
-    ,PASS_M_1: { text: '什么是双重认证（2FA）？' }
-    ,PASS_M_2: { text: '同一个邮箱密码已用了5年。这有问题吗？' }
-    ,PASS_M_3: { text: '管理密码的最佳方式？' }
-    ,PASS_H_1: { text: '什么是“凭证填充”（Credential Stuffing）？' }
-    ,PASS_H_2: { text: '朋友向你索要Netflix密码。' }
-    ,PASS_H_3: { text: '最安全的2FA形式是？' }
-    ,PASS_H_4: { text: '什么是“口令短语”（Passphrase）？' }
-    ,MAL_E_2: { text: '从种子站下载“Photoshop”。' }
-    ,MAL_M_2: { text: '设备提示安装更新，你应该……' }
-    ,MAL_M_3: { text: '防止勒索软件导致数据损失的最佳保护是？' }
-    ,MAL_H_1: { text: '什么是“零日漏洞”？' }
-    ,MAL_H_2: { text: '什么是“僵尸网络”（Botnet）？' }
-    ,MAL_H_3: { text: '什么是“键盘记录器”（Keylogger）？' }
-    ,MAL_H_4: { text: '旁加载应用是什么意思？' }
-    ,MAL_H_5: { text: "你在论坛看到一个‘有用’的代码片段解决你的Bug，你应该：" }
-    ,DATA_H_4: { text: '什么是“肩窥”（Shoulder Surfing）？' }
-    ,SOC_H_1: { text: '什么是“借口欺骗”（Pretexting）？' }
-    ,SOC_H_4: { text: '攻击者冒充愤怒的高层主管，索要敏感信息。这是：' }
-    ,SOC_H_5: { text: "一位‘客户’来电称账户被锁，急需查询余额，且验证失败仍威胁投诉。你会怎么做？" }
-    ,SCAM_E_2: { text: "来自‘PDRM’的来电称你的IC涉案，要求转账至‘安全’账户。你应该：" }
-    ,SCAM_M_2: { text: '一则Facebook广告宣称“砂拉越投资”24小时保证30%收益。' }
-    ,SCAM_H_1: { text: '你收到包含TAC/OTP的短信，随后有人来电要求你读出数字。' }
-    ,M2_Q9: { 
+    , SOC_E_2: { text: '什么是“尾随进入”（物理安全）？' }
+    , SOC_M_1: { text: '为何社交媒体上的“趣味问答”存在风险？' }
+    , SOC_M_2: { text: '收到一位陌生漂亮人士的好友请求。' }
+    , SOC_M_3: { text: '社会工程主要依赖于……' }
+    , SOC_H_2: { text: '为何在社交媒体发布登机牌照片存在风险？' }
+    , SOC_H_3: { text: '什么是“等价交换”（Quid Pro Quo）？' }
+    , MAL_E_1: { text: '弹窗提示你的电脑感染了5个病毒；点击进行扫描。' }
+    , MAL_X_1: { text: "你检测到某工作站向已知C2服务器发出“Beacon”，但EDR未告警。你的第一步是什么？" }
+    , SCAM_E_3: { text: '网游中有人承诺只要提供登录信息就送你“免费”稀有物品。这是：' }
+    , SCAM_M_1: { text: "来自‘Pos Laju’的短信，附.apk用于重新安排投递。" }
+    , SCAM_M_3: { text: "来自‘Sarawak Energy’的来电：1小时内将断电，除非电话支付账单。" }
+    , SCAM_H_2: { text: '为何短信中的.apk应用如此危险？' }
+    , SCAM_H_3: { text: '在Marketplace购买二手物品时，卖家经常……' }
+    , PHISH_H_2: { text: '什么是“Vishing”（语音钓鱼）？' }
+    , PHISH_H_3: { text: '什么是“同形异义域名”（Punycode）攻击？' }
+    , PHISH_M_2: { text: '钓鱼邮件的主要目标是什么？' }
+    , PHISH_H_1: { text: '这是一封高度个性化并提到你工作的邮件，这是：' }
+    , PHISH_H_4: { text: '绿色锁图标（SSL）表示什么？' }
+    , PASS_E_1: { text: '哪一个是最安全的密码？' }
+    , PASS_E_2: { text: '你如何管理你的密码？' }
+    , PASS_M_1: { text: '什么是双重认证（2FA）？' }
+    , PASS_M_2: { text: '同一个邮箱密码已用了5年。这有问题吗？' }
+    , PASS_M_3: { text: '管理密码的最佳方式？' }
+    , PASS_H_1: { text: '什么是“凭证填充”（Credential Stuffing）？' }
+    , PASS_H_2: { text: '朋友向你索要Netflix密码。' }
+    , PASS_H_3: { text: '最安全的2FA形式是？' }
+    , PASS_H_4: { text: '什么是“口令短语”（Passphrase）？' }
+    , MAL_E_2: { text: '从种子站下载“Photoshop”。' }
+    , MAL_M_2: { text: '设备提示安装更新，你应该……' }
+    , MAL_M_3: { text: '防止勒索软件导致数据损失的最佳保护是？' }
+    , MAL_H_1: { text: '什么是“零日漏洞”？' }
+    , MAL_H_2: { text: '什么是“僵尸网络”（Botnet）？' }
+    , MAL_H_3: { text: '什么是“键盘记录器”（Keylogger）？' }
+    , MAL_H_4: { text: '旁加载应用是什么意思？' }
+    , MAL_H_5: { text: "你在论坛看到一个‘有用’的代码片段解决你的Bug，你应该：" }
+    , DATA_H_4: { text: '什么是“肩窥”（Shoulder Surfing）？' }
+    , SOC_H_1: { text: '什么是“借口欺骗”（Pretexting）？' }
+    , SOC_H_4: { text: '攻击者冒充愤怒的高层主管，索要敏感信息。这是：' }
+    , SOC_H_5: { text: "一位‘客户’来电称账户被锁，急需查询余额，且验证失败仍威胁投诉。你会怎么做？" }
+    , SCAM_E_2: { text: "来自‘PDRM’的来电称你的IC涉案，要求转账至‘安全’账户。你应该：" }
+    , SCAM_M_2: { text: '一则Facebook广告宣称“砂拉越投资”24小时保证30%收益。' }
+    , SCAM_H_1: { text: '你收到包含TAC/OTP的短信，随后有人来电要求你读出数字。' }
+    , M2_Q9: {
       text: '你在社交媒体看到一则投资广告称每周都有很高回报且几乎无风险。你最可能会怎么做？',
       tip: '当“轻松高回报”出现时，应放慢脚步，了解其真实运作。',
       options: { invest_test: '先小额尝试', ask_friends: '向推广者询问更多细节', avoid_ponzi: '避免，因为听起来不真实', contact_agent: '发给朋友征求意见' }
     }
-    ,M2_Q16: {
+    , M2_Q16: {
       options: { ask_id: '结束通话且不提供任何登录信息' }
     }
-    ,M6_Q44: {
+    , M6_Q44: {
       options: { ask_id: '要求对方提供官方身份信息' }
     }
   },
@@ -953,57 +953,57 @@ const questionDict = {
       text: 'Seseorang dari IT perlukan kata laluan untuk “migrasi pelayan”.',
       options: { give_password_now: 'Berikan kata laluan', verify_helpdesk: 'Hubungi helpdesk rasmi untuk sahkan', prove_identity: 'Minta bukti identiti' }
     }
-    ,SOC_E_2: { text: 'Apakah “tailgating” (keselamatan fizikal)?' }
-    ,SOC_M_1: { text: 'Mengapa kuiz “seronok” di media sosial berisiko?' }
-    ,SOC_M_2: { text: 'Permintaan rakan baharu daripada individu yang tidak dikenali.' }
-    ,SOC_M_3: { text: 'Kejuruteraan sosial bergantung kepada…' }
-    ,SOC_H_2: { text: 'Mengapa memuat naik foto pas masuk penerbangan berisiko?' }
-    ,SOC_H_3: { text: 'Apakah “Quid Pro Quo”?' }
-    ,MAL_E_1: { text: 'Pop-up menyatakan komputer anda dijangkiti 5 virus; klik untuk imbas.' }
-    ,MAL_X_1: { text: "Anda mengesan ‘Beacon’ dari workstation ke pelayan C2 yang diketahui, tetapi EDR tidak menandakan. Apakah langkah pertama anda?" }
-    ,SCAM_E_3: { text: 'Seseorang dalam permainan menawarkan item “percuma” yang jarang jika anda memberikan butiran log masuk. Ini ialah:' }
-    ,SCAM_M_1: { text: "SMS daripada ‘Pos Laju’ dengan .apk untuk menjadual semula penghantaran." }
-    ,SCAM_M_3: { text: "Panggilan daripada ‘Sarawak Energy’: bekalan elektrik diputus dalam 1 jam kecuali bayar melalui telefon." }
-    ,SCAM_H_2: { text: 'Mengapa fail .apk daripada SMS sangat berbahaya?' }
-    ,SCAM_H_3: { text: 'Membeli barang terpakai di Marketplace, penjual selalunya…' }
-    ,PHISH_H_2: { text: 'Apakah “Vishing”?' }
-    ,PHISH_H_3: { text: 'Apakah serangan “Punycode”?' }
-    ,PHISH_M_2: { text: 'Apakah tujuan utama emel pancingan?' }
-    ,PHISH_H_1: { text: 'Emel sangat diperibadikan dan merujuk kerja anda. Ini ialah:' }
-    ,PHISH_H_4: { text: 'Apakah maksud ikon kunci hijau (SSL)?' }
-    ,PASS_E_1: { text: 'Yang manakah kata laluan paling selamat?' }
-    ,PASS_E_2: { text: 'Bagaimana anda mengurus kata laluan anda?' }
-    ,PASS_M_1: { text: 'Apakah Pengesahan Dua Faktor (2FA)?' }
-    ,PASS_M_2: { text: 'Kata laluan emel yang sama digunakan selama 5 tahun. Adakah ini masalah?' }
-    ,PASS_M_3: { text: 'Cara terbaik mengurus kata laluan?' }
-    ,PASS_H_1: { text: 'Apakah “Credential Stuffing”?' }
-    ,PASS_H_2: { text: 'Rakan meminta kata laluan Netflix anda.' }
-    ,PASS_H_3: { text: 'Bentuk 2FA yang paling selamat?' }
-    ,PASS_H_4: { text: 'Apakah “Passphrase”?' }
-    ,MAL_E_2: { text: 'Muat turun “Photoshop” daripada laman torrent.' }
-    ,MAL_M_2: { text: 'Peranti meminta kemas kini, anda patut…' }
-    ,MAL_M_3: { text: 'Perlindungan terbaik terhadap kehilangan data akibat ransomware?' }
-    ,MAL_H_1: { text: 'Apakah “Zero‑Day”?' }
-    ,MAL_H_2: { text: 'Apakah “Botnet”?' }
-    ,MAL_H_3: { text: 'Apakah “Keylogger”?' }
-    ,MAL_H_4: { text: 'Apakah maksud “sideloading” aplikasi?' }
-    ,MAL_H_5: { text: "Anda menemui potongan kod ‘berguna’ di forum untuk menyelesaikan pepijat. Anda patut:" }
-    ,DATA_H_4: { text: 'Apakah “Shoulder Surfing”?' }
-    ,SOC_H_1: { text: 'Apakah “Pretexting”?' }
-    ,SOC_H_4: { text: 'Penyerang berpura‑pura menjadi eksekutif tertinggi yang marah dan menuntut maklumat. Ini ialah:' }
-    ,SOC_H_5: { text: "‘Pelanggan’ menelefon mendakwa akaun dikunci, mendesak tahu baki; gagal pengesahan dan mengugut untuk mengadu. Apa yang anda lakukan?" }
-    ,SCAM_E_2: { text: "Panggilan daripada ‘PDRM’ mendakwa IC anda terlibat jenayah dan minta pindah ke akaun ‘selamat’." }
-    ,SCAM_M_2: { text: 'Iklan Facebook “pelaburan Sarawak” menjamin 30% dalam 24 jam.' }
-    ,SCAM_H_1: { text: 'Anda terima SMS TAC/OTP; seseorang menelefon minta anda bacakan nombor.' }
-    ,M2_Q9: { 
+    , SOC_E_2: { text: 'Apakah “tailgating” (keselamatan fizikal)?' }
+    , SOC_M_1: { text: 'Mengapa kuiz “seronok” di media sosial berisiko?' }
+    , SOC_M_2: { text: 'Permintaan rakan baharu daripada individu yang tidak dikenali.' }
+    , SOC_M_3: { text: 'Kejuruteraan sosial bergantung kepada…' }
+    , SOC_H_2: { text: 'Mengapa memuat naik foto pas masuk penerbangan berisiko?' }
+    , SOC_H_3: { text: 'Apakah “Quid Pro Quo”?' }
+    , MAL_E_1: { text: 'Pop-up menyatakan komputer anda dijangkiti 5 virus; klik untuk imbas.' }
+    , MAL_X_1: { text: "Anda mengesan ‘Beacon’ dari workstation ke pelayan C2 yang diketahui, tetapi EDR tidak menandakan. Apakah langkah pertama anda?" }
+    , SCAM_E_3: { text: 'Seseorang dalam permainan menawarkan item “percuma” yang jarang jika anda memberikan butiran log masuk. Ini ialah:' }
+    , SCAM_M_1: { text: "SMS daripada ‘Pos Laju’ dengan .apk untuk menjadual semula penghantaran." }
+    , SCAM_M_3: { text: "Panggilan daripada ‘Sarawak Energy’: bekalan elektrik diputus dalam 1 jam kecuali bayar melalui telefon." }
+    , SCAM_H_2: { text: 'Mengapa fail .apk daripada SMS sangat berbahaya?' }
+    , SCAM_H_3: { text: 'Membeli barang terpakai di Marketplace, penjual selalunya…' }
+    , PHISH_H_2: { text: 'Apakah “Vishing”?' }
+    , PHISH_H_3: { text: 'Apakah serangan “Punycode”?' }
+    , PHISH_M_2: { text: 'Apakah tujuan utama emel pancingan?' }
+    , PHISH_H_1: { text: 'Emel sangat diperibadikan dan merujuk kerja anda. Ini ialah:' }
+    , PHISH_H_4: { text: 'Apakah maksud ikon kunci hijau (SSL)?' }
+    , PASS_E_1: { text: 'Yang manakah kata laluan paling selamat?' }
+    , PASS_E_2: { text: 'Bagaimana anda mengurus kata laluan anda?' }
+    , PASS_M_1: { text: 'Apakah Pengesahan Dua Faktor (2FA)?' }
+    , PASS_M_2: { text: 'Kata laluan emel yang sama digunakan selama 5 tahun. Adakah ini masalah?' }
+    , PASS_M_3: { text: 'Cara terbaik mengurus kata laluan?' }
+    , PASS_H_1: { text: 'Apakah “Credential Stuffing”?' }
+    , PASS_H_2: { text: 'Rakan meminta kata laluan Netflix anda.' }
+    , PASS_H_3: { text: 'Bentuk 2FA yang paling selamat?' }
+    , PASS_H_4: { text: 'Apakah “Passphrase”?' }
+    , MAL_E_2: { text: 'Muat turun “Photoshop” daripada laman torrent.' }
+    , MAL_M_2: { text: 'Peranti meminta kemas kini, anda patut…' }
+    , MAL_M_3: { text: 'Perlindungan terbaik terhadap kehilangan data akibat ransomware?' }
+    , MAL_H_1: { text: 'Apakah “Zero‑Day”?' }
+    , MAL_H_2: { text: 'Apakah “Botnet”?' }
+    , MAL_H_3: { text: 'Apakah “Keylogger”?' }
+    , MAL_H_4: { text: 'Apakah maksud “sideloading” aplikasi?' }
+    , MAL_H_5: { text: "Anda menemui potongan kod ‘berguna’ di forum untuk menyelesaikan pepijat. Anda patut:" }
+    , DATA_H_4: { text: 'Apakah “Shoulder Surfing”?' }
+    , SOC_H_1: { text: 'Apakah “Pretexting”?' }
+    , SOC_H_4: { text: 'Penyerang berpura‑pura menjadi eksekutif tertinggi yang marah dan menuntut maklumat. Ini ialah:' }
+    , SOC_H_5: { text: "‘Pelanggan’ menelefon mendakwa akaun dikunci, mendesak tahu baki; gagal pengesahan dan mengugut untuk mengadu. Apa yang anda lakukan?" }
+    , SCAM_E_2: { text: "Panggilan daripada ‘PDRM’ mendakwa IC anda terlibat jenayah dan minta pindah ke akaun ‘selamat’." }
+    , SCAM_M_2: { text: 'Iklan Facebook “pelaburan Sarawak” menjamin 30% dalam 24 jam.' }
+    , SCAM_H_1: { text: 'Anda terima SMS TAC/OTP; seseorang menelefon minta anda bacakan nombor.' }
+    , M2_Q9: {
       text: 'Anda melihat iklan di media sosial mengatakan pelaburan boleh memberi pulangan tinggi setiap minggu dengan hampir tiada risiko. Apa yang paling mungkin anda lakukan?',
       tip: 'Apabila wang “tumbuh laju” dengan usaha minima, perlahan dan fahami cara sebenar ia berfungsi.',
       options: { invest_test: 'Cuba melabur jumlah kecil dahulu', ask_friends: 'Tanya pihak yang mempromosi untuk butiran lanjut', avoid_ponzi: 'Elakkan kerana kedengaran tidak realistik', contact_agent: 'Kongsi kepada rakan untuk minta pandangan' }
     }
-    ,M2_Q16: {
+    , M2_Q16: {
       options: { ask_id: 'Tamatkan panggilan dan jangan kongsi sebarang butiran log masuk' }
     }
-    ,M6_Q44: {
+    , M6_Q44: {
       options: { ask_id: 'Minta pengenalan rasmi sebelum meneruskan' }
     }
   },
@@ -2557,7 +2557,7 @@ const otx = (lang, s) => {
       .replace('Conclude that the offer is likely fraudulent due to unrealistic pricing', 'Simpulka tawaran nya berkemungkinan penipuan laban harga nadai realistik')
       .replace('Request additional product photos from the seller', 'Minta gambar produk tambahan ari penjual')
       .replace('Evaluate the seller follower count and engagement', 'Nilai bilangan pengikut enggau penglibatan penjual')
-    ;
+      ;
   }
   if (lang === 'zh') {
     return s
@@ -2940,21 +2940,21 @@ export const LanguageProvider = ({ children }) => {
 
   const changeLanguage = (lang) => {
     setLanguage(lang);
-    try { localStorage.setItem(STORAGE_KEY, lang); } catch {}
+    try { localStorage.setItem(STORAGE_KEY, lang); } catch { }
   };
 
-const t = useCallback((key) => {
-  const dict = dictionary[language] || dictionary.en;
-  if (dict[key] !== undefined) return dict[key];
-  if (language === 'swk' && dictionary.ms && dictionary.ms[key] !== undefined) return dictionary.ms[key];
-  return dictionary.en[key] || key;
-}, [language]);
+  const t = useCallback((key) => {
+    const dict = dictionary[language] || dictionary.en;
+    if (dict[key] !== undefined) return dict[key];
+    if (language === 'swk' && dictionary.ms && dictionary.ms[key] !== undefined) return dictionary.ms[key];
+    return dictionary.en[key] || key;
+  }, [language]);
 
-const localeFor = (lang) => {
-  if (lang === 'zh') return 'zh-CN';
-  if (lang === 'ms' || lang === 'swk') return 'ms-MY';
-  return 'en-US';
-};
+  const localeFor = (lang) => {
+    if (lang === 'zh') return 'zh-CN';
+    if (lang === 'ms' || lang === 'swk') return 'ms-MY';
+    return 'en-US';
+  };
 
   const formatDate = useCallback((value, options) => {
     const v = value instanceof Date ? value : new Date(value);
@@ -2964,50 +2964,50 @@ const localeFor = (lang) => {
     return new Intl.DateTimeFormat(locale, opts).format(v);
   }, [language]);
 
-useEffect(() => {
-  const buildAutoI18n = async () => {
-    try {
-      const res = await fetch('/api/assessment/questions');
-      const qs = await res.json();
-      if (!Array.isArray(qs) || qs.length === 0) return;
-      const langs = ['zh', 'ms', 'swk'];
-      const autoQ = {};
-      const autoO = {};
-      langs.forEach((lg) => {
-        autoQ[lg] = {};
-        autoO[lg] = {};
-      });
-      qs.forEach((q) => {
+  useEffect(() => {
+    const buildAutoI18n = async () => {
+      try {
+        const res = await fetch('/api/assessment/questions');
+        const qs = await res.json();
+        if (!Array.isArray(qs) || qs.length === 0) return;
+        const langs = ['zh', 'ms', 'swk'];
+        const autoQ = {};
+        const autoO = {};
         langs.forEach((lg) => {
-          const txText = qtx(lg, q.text);
-          const tipText = qtipx(lg, q.tip);
-          const optMap = {};
-          (q.options || []).forEach((o) => {
-            const ot = otx(lg, o.text);
-            optMap[o.value] = ot;
-            if (!autoO[lg][o.value]) autoO[lg][o.value] = ot;
-          });
-          autoQ[lg][q.codeId] = { text: txText, tip: tipText, options: optMap };
+          autoQ[lg] = {};
+          autoO[lg] = {};
         });
-      });
-      setQdictState((prev) => ({
-        ...prev,
-        zh: { ...(autoQ.zh || {}), ...(prev.zh || {}) },
-        ms: { ...(autoQ.ms || {}), ...(prev.ms || {}) },
-        swk: { ...(prev.swk || {}), ...(autoQ.swk || {}), ...(prev.ms || {}) }
-      }));
-      setOdictState((prev) => ({
-        ...prev,
-        zh: { ...(autoO.zh || {}), ...(prev.zh || {}) },
-        ms: { ...(autoO.ms || {}), ...(prev.ms || {}) },
-        swk: { ...(prev.swk || {}), ...(autoO.swk || {}), ...(prev.ms || {}) }
-      }));
-    } catch {}
-  };
-  buildAutoI18n();
-}, []);
+        qs.forEach((q) => {
+          langs.forEach((lg) => {
+            const txText = qtx(lg, q.text);
+            const tipText = qtipx(lg, q.tip);
+            const optMap = {};
+            (q.options || []).forEach((o) => {
+              const ot = otx(lg, o.text);
+              optMap[o.value] = ot;
+              if (!autoO[lg][o.value]) autoO[lg][o.value] = ot;
+            });
+            autoQ[lg][q.codeId] = { text: txText, tip: tipText, options: optMap };
+          });
+        });
+        setQdictState((prev) => ({
+          ...prev,
+          zh: { ...(autoQ.zh || {}), ...(prev.zh || {}) },
+          ms: { ...(autoQ.ms || {}), ...(prev.ms || {}) },
+          swk: { ...(prev.swk || {}), ...(autoQ.swk || {}), ...(prev.ms || {}) }
+        }));
+        setOdictState((prev) => ({
+          ...prev,
+          zh: { ...(autoO.zh || {}), ...(prev.zh || {}) },
+          ms: { ...(autoO.ms || {}), ...(prev.ms || {}) },
+          swk: { ...(prev.swk || {}), ...(autoO.swk || {}), ...(prev.ms || {}) }
+        }));
+      } catch { }
+    };
+    buildAutoI18n();
+  }, []);
 
-const value = useMemo(() => ({ language, setLanguage: changeLanguage, t, formatDate, dictionary, qdict: qdictState, odict: odictState, tx, tt, qtx, qtipx, otx }), [language, qdictState, odictState, t, formatDate]);
+  const value = useMemo(() => ({ language, setLanguage: changeLanguage, t, formatDate, dictionary, qdict: qdictState, odict: odictState, tx, tt, qtx, qtipx, otx }), [language, qdictState, odictState, t, formatDate]);
 
   return (
     <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
