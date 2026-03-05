@@ -1,0 +1,49 @@
+# ---- Git & editor files ----
+**/.git
+**/.gitignore
+**/.vscode
+**/.idea
+**/.trae
+**/.DS_Store
+Thumbs.db
+
+# ---- Docker files (avoid recursive copies) ----
+**/.dockerignore
+**/Dockerfile*
+**/compose.y*ml
+**/docker-compose*
+
+# ---- Environment & secrets ----
+**/.env
+**/.env.*
+**/secrets.dev.yaml
+**/values.dev.yaml
+
+# ---- Dependencies (rebuilt inside container) ----
+**/node_modules
+
+# ---- Frontend (not served by the backend container) ----
+frontend/
+
+# ---- Tests & scripts (not needed in production) ----
+tests/
+scripts/
+
+# ---- Build output & logs ----
+**/build
+**/dist
+**/coverage
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+*.log
+
+# ---- Project meta files not needed at runtime ----
+README.md
+README.Docker.md
+LICENSE
+.env.example
+.stylelintrc.json
+dependencies.txt
+install-dependencies.ps1
+referenceNavbar.js

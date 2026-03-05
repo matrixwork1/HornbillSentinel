@@ -1,3 +1,4 @@
+require('dns').setServers(['8.8.8.8', '8.8.4.4']);
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -10,7 +11,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const mongoSanitize = require('express-mongo-sanitize');
-const enhancedSanitize = require('./middleware/sanitize'); 
+const enhancedSanitize = require('./middleware/sanitize');
 const { generateNonce } = require('./middleware/csp');
 const { router: authRoutes } = require('./routes/auth');
 const twoFactorRoutes = require('./routes/twoFactor');
@@ -19,6 +20,10 @@ const { verifyTransporter, sendTestEmail } = require('./utils/email');
 const { csrfProtection, getCSRFToken } = require('./middleware/csrf');
 
 const app = express();
+
+// Trust proxy (required for Cloud Run / reverse proxies)
+// This ensures secure cookies work behind Cloud Run's load balancer
+app.set('trust proxy', 1);
 
 // HTTPS enforcement middleware (for production)
 app.use((req, res, next) => {
@@ -66,13 +71,13 @@ app.use(cookieParser());
 
 // Session middleware for CSRF (fallback to in-memory store in development)
 const baseSessionConfig = {
-  secret: process.env.SESSION_SECRET || 'your-session-secret',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     maxAge: 24 * 60 * 60 * 1000
   }
 };
@@ -169,11 +174,19 @@ app.use('/api/assessment', assessmentLimiter);
 app.use(generalLimiter);
 
 // CORS configuration
+const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:3000')
+  .split(',')
+  .map(url => url.trim());
+
 const corsOptions = {
   origin: (origin, callback) => {
     if (process.env.NODE_ENV !== 'production') return callback(null, true);
-    const allowed = process.env.FRONTEND_URL || 'http://localhost:3000';
-    if (!origin || origin === allowed) return callback(null, true);
+    // Allow requests with no origin (e.g. mobile apps, server-to-server)
+    if (!origin) return callback(null, true);
+    // Check exact match against allowed origins
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    // Allow Vercel preview deployment URLs (pattern: *-<project>.vercel.app)
+    if (origin.endsWith('.vercel.app')) return callback(null, true);
     return callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
@@ -211,8 +224,8 @@ if (process.env.NODE_ENV !== 'test') {
 if (process.env.NODE_ENV !== 'test') {
   const mongoUri = process.env.MONGO_URI || process.env.TEST_MONGO_URI || 'mongodb://localhost:27017/digital_type_assessment';
   mongoose.connect(mongoUri)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB connection error:', err));
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
 }
 
 // Routes
@@ -245,8 +258,8 @@ if (process.env.NODE_ENV !== 'production') {
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ 
-    message: process.env.NODE_ENV === 'production' ? 'Something went wrong!' : err.message 
+  res.status(500).json({
+    message: process.env.NODE_ENV === 'production' ? 'Something went wrong!' : err.message
   });
 });
 

@@ -1,0 +1,33 @@
+services:
+  server:
+    build:
+      context: .
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      # Override MONGO_URI to point to the containerised MongoDB instance.
+      MONGO_URI: mongodb://mongo:27017/digital_type_assessment
+    ports:
+      - 5001:5001
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - 27017:27017
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  mongo-data:

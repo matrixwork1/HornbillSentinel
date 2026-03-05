@@ -9,6 +9,9 @@ const { sendResetEmail, sendOTPEmail } = require('../utils/email');
 const crypto = require('crypto');
 const auth = require('../middleware/auth');
 const xss = require('xss');
+
+// Cross-origin cookie setting: 'none' in production (Vercel → Cloud Run), 'strict' in dev
+const sameSiteValue = process.env.NODE_ENV === 'production' ? 'none' : 'strict';
 // Import validation middleware
 const { validate, registerSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema } = require('../middleware/validation');
 
@@ -17,7 +20,7 @@ const setTokenCookie = (res, token) => {
   res.cookie('token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: sameSiteValue,
     maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
   });
 };
@@ -27,7 +30,7 @@ const clearTokenCookie = (res) => {
   res.clearCookie('token', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
+    sameSite: sameSiteValue
   });
 };
 
@@ -71,7 +74,7 @@ const setAuthCookies = (res, accessToken, refreshToken, fingerprint = null) => {
   res.cookie('accessToken', accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: sameSiteValue,
     maxAge: 15 * 60 * 1000 // 15 minutes
   });
 
@@ -79,7 +82,7 @@ const setAuthCookies = (res, accessToken, refreshToken, fingerprint = null) => {
   res.cookie('token', accessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: sameSiteValue,
     maxAge: 15 * 60 * 1000 // 15 minutes
   });
 
@@ -87,7 +90,7 @@ const setAuthCookies = (res, accessToken, refreshToken, fingerprint = null) => {
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: sameSiteValue,
     maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
   });
 
@@ -96,7 +99,7 @@ const setAuthCookies = (res, accessToken, refreshToken, fingerprint = null) => {
     res.cookie('fingerprint', fingerprint, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: sameSiteValue,
       maxAge: 15 * 60 * 1000 // 15 minutes (same as access token)
     });
   }
@@ -106,23 +109,23 @@ const clearAuthCookies = (res) => {
   res.clearCookie('accessToken', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
+    sameSite: sameSiteValue
   });
   res.clearCookie('refreshToken', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
+    sameSite: sameSiteValue
   });
   res.clearCookie('token', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
+    sameSite: sameSiteValue
   });
   // FIX 3: Clear fingerprint cookie on logout
   res.clearCookie('fingerprint', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
+    sameSite: sameSiteValue
   });
 };
 
@@ -462,7 +465,7 @@ router.post('/refresh', async (req, res) => {
     res.cookie('accessToken', newAccessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: sameSiteValue,
       maxAge: 15 * 60 * 1000 // 15 minutes
     });
 
@@ -470,7 +473,7 @@ router.post('/refresh', async (req, res) => {
     res.cookie('token', newAccessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: sameSiteValue,
       maxAge: 15 * 60 * 1000 // 15 minutes
     });
 
@@ -478,7 +481,7 @@ router.post('/refresh', async (req, res) => {
     res.cookie('fingerprint', fingerprint, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: sameSiteValue,
       maxAge: 15 * 60 * 1000 // 15 minutes
     });
 

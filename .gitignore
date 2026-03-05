@@ -32,8 +32,17 @@ frontend/coverage/
 .idea/
 Thumbs.db
 
-# Trae IDE config
+# Vercel
+.vercel/
+frontend/.vercel/
+
+# AI / IDE config
 .trae/
+.gemini/
+.agent/
+.agents/
+_agent/
+_agents/
 
 # Misc
 *.swp
