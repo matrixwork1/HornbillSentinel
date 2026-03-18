@@ -389,7 +389,7 @@ const AssessmentResults = () => {
 
         <div className="dashboard-actions" style={{ marginTop: '16px' }}>
           <Link to="/assessment-start" className="dashboard-button">{t('retake_assessment')}</Link>
-          <Link to="/dashboard" className="dashboard-button" style={{ marginLeft: '12px' }}>{t('go_dashboard')}</Link>
+          <Link to="/dashboard" className="dashboard-button">{t('go_dashboard')}</Link>
         </div>
       </div>
     </div>

@@ -1,0 +1,109 @@
+/* ============================================
+   GRAVITY PHYSICS COMPONENT
+   ============================================ */
+
+.gravity-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.gravity-container canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  touch-action: pan-y !important;
+}
+
+.gravity-body-wrapper {
+  position: absolute;
+}
+
+.gravity-no-pointer {
+  pointer-events: none;
+}
+
+/* ── Gravity pills (digital types) ── */
+.gravity-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-light);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: grab;
+  user-select: none;
+  white-space: nowrap;
+  pointer-events: auto;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: box-shadow 0.2s ease;
+}
+
+.gravity-pill:active {
+  cursor: grabbing;
+}
+
+/* Individual pill color schemes matching the type-badge gradients */
+.pill-strategic-custodian {
+  background: linear-gradient(135deg, #14b8a6, #3b82f6);
+}
+
+.pill-technical-architect {
+  background: linear-gradient(135deg, #16a34a, #06b6d4);
+}
+
+.pill-network-liaison {
+  background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+}
+
+.pill-operational-analyst {
+  background: linear-gradient(135deg, #84cc16, #06b6d4);
+}
+
+.pill-digital-consumer {
+  background: linear-gradient(135deg, #06b6d4, #14b8a6);
+}
+
+.pill-security-savvy {
+  background: linear-gradient(135deg, #10b981, #22c55e);
+}
+
+.pill-careless-clicker {
+  background: linear-gradient(135deg, #ef4444, #f59e0b);
+}
+
+.pill-password-reuser {
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  color: var(--midnight);
+}
+
+.pill-update-avoider {
+  background: linear-gradient(135deg, #f97316, #ef4444);
+}
+
+.pill-oversharer {
+  background: linear-gradient(135deg, #f97316, #f59e0b);
+  color: var(--midnight);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .gravity-pill {
+    font-size: 0.85rem;
+    padding: 0.6rem 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gravity-pill {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.9rem;
+  }
+}

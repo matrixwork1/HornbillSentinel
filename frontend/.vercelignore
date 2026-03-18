@@ -1,0 +1,6 @@
+# Vercel Ignore file for frontend
+.git
+.env
+.env.*
+node_modules
+README.md

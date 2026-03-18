@@ -1,83 +1,85 @@
-/* Main color variables - matching the homepage theme */
-:root {
-  --primary-black: #121212;
-  --primary-yellow: #FFD700;
-  --primary-red: #FF3B30;
-  --text-light: #FFFFFF;
-  --text-dark: #121212;
-  --accent-gray: #333333;
-}
+/* ============================================
+   ABOUT & CONTACT â€” Professional Dark Teal-Gold
+   ============================================ */
 
-/* Page container */
 .page-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 3rem 2rem;
-  padding-top: 8rem; /* Add top padding to account for fixed navbar */
+  padding-top: 8rem;
   color: var(--text-light);
 }
 
-/* Page header - increased sizes */
+/* Page header */
 .page-header {
   text-align: center;
   margin-bottom: 3rem;
 }
 
 .page-header h1 {
-  font-size: 3.5rem; /* Increased from 2.5rem */
-  font-weight: 800; /* Increased from 700 */
-  margin-bottom: 1.5rem; /* Increased from 1rem */
-  background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-fill-color: transparent;
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: var(--blue);
+  letter-spacing: -0.02em;
 }
 
 .page-header p {
-  font-size: 1.4rem; /* Increased from 1.1rem */
+  font-size: 1.3rem;
   color: var(--text-muted);
   max-width: 800px;
   margin: 0 auto;
   line-height: 1.7;
+  font-weight: 300;
 }
 
-/* Responsive adjustments for the larger headers */
-@media (max-width: 768px) {
-  .page-header h1 {
-    font-size: 2.8rem; /* Increased from 2rem */
-  }
-  
-  .page-header p {
-    font-size: 1.2rem; /* Added responsive size */
-  }
-}
-
-@media (max-width: 480px) {
-  .page-header h1 {
-    font-size: 2.4rem; /* Added smaller screen size */
-  }
-}
-
-/* Content section */
+/* Content sections with teal-gold accent */
 .content-section {
-  background-color: var(--surface-dark);
-  border-radius: 16px;
+  background: var(--glass-bg);
+  backdrop-filter: saturate(var(--glass-saturate)) blur(var(--glass-blur));
+  -webkit-backdrop-filter: saturate(var(--glass-saturate)) blur(var(--glass-blur));
+  border: 1px solid var(--border-glass);
+  border-radius: var(--glass-radius);
   padding: 2.5rem;
   margin-bottom: 2.5rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
   position: relative;
   overflow: hidden;
+  transition: all 0.4s ease;
+  z-index: 0;
 }
 
+/* Left accent bar */
 .content-section::before {
   content: '';
   position: absolute;
   left: 0;
   top: 0;
   height: 100%;
-  width: 4px;
-  background: linear-gradient(to bottom, var(--primary-accent), var(--secondary-accent));
+  width: 3px;
+  background: linear-gradient(to bottom, var(--blue), var(--champagne));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.content-section::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 50%;
+  height: 160%;
+  background: radial-gradient(ellipse, rgba(123, 147, 255, 0.02), transparent 60%);
+  pointer-events: none;
+}
+
+.content-section:hover {
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3), 0 0 20px var(--glow-soft);
+  border-color: var(--border-hover);
+}
+
+.content-section:hover::before {
+  opacity: 1;
 }
 
 .content-section h2 {
@@ -86,220 +88,61 @@
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-weight: 600;
+  position: relative;
+  z-index: 1;
 }
 
 .content-section p {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   line-height: 1.7;
   color: var(--text-muted);
   margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
 }
 
-/* Team section for About page */
+/* Team grid - 3D cards */
 .team-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 2rem;
   margin-top: 2.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .team-member {
-  background-color: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
-  padding: 1.5rem;
+  background: var(--surface-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--glass-radius-sm);
+  padding: 2rem 1.5rem;
   text-align: center;
-  transition: transform 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  perspective: 600px;
 }
 
 .team-member:hover {
-  transform: translateY(-5px);
+  transform: translateY(-10px) rotateX(-2deg) rotateY(1deg);
+  border-color: var(--border-hover);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25), 0 0 20px var(--glow-soft);
+  background: var(--surface-glass-hover);
 }
 
 .member-image {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  margin: 0 auto 1rem;
+  margin: 0 auto 1.25rem;
   overflow: hidden;
-  border: 3px solid var(--primary-accent);
-}
-
-.member-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.member-name {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--text-light);
-  margin-bottom: 0.5rem;
-}
-
-.member-role {
-  color: var(--primary-accent);
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-}
-
-.member-bio {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-/* Contact form */
-.contact-form {
-  margin-top: 2rem;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.75rem;
-  color: var(--text-light);
-  font-weight: 500;
-}
-
-/* Contact grid layout - further reduce spacing */
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem; /* Further reduced from 2rem to 1rem */
-}
-
-/* Submit button styling - fixed and enhanced */
-.submit-btn {
-  background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent));
-  color: var(--text-light);
-  border: none;
-  border-radius: 8px;
-  padding: 1rem 2.5rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
+  border: 2px solid rgba(123, 147, 255, 0.2);
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
-  display: inline-block;
-  margin-top: 1rem;
 }
 
-.submit-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.5);
-}
-
-/* Reduce vertical spacing in form */
-.form-group {
-  margin-bottom: 1rem; /* Reduced from 1.5rem */
-}
-
-/* Reduce spacing between contact methods */
-.contact-method {
-  margin-bottom: 1rem; /* Further reduced from 1.5rem */
-}
-
-/* Reduce spacing after contact info paragraph */
-.contact-info > p {
-  margin-bottom: 1.5rem; /* Reduced from 2.5rem */
-}
-
-/* Reduce spacing after headings */
-.contact-info h2, 
-.contact-form-container h2 {
-  margin-bottom: 1rem; /* Reduced from 1.5rem */
-}
-
-/* Ensure the form container takes full width */
-.contact-form-container {
-  width: 100%;
-  padding-top: 0; /* Removed top padding */
-}
-
-/* Responsive adjustments for the larger headers */
-@media (max-width: 768px) {
-  .page-header h1 {
-    font-size: 2.8rem; /* Increased from 2rem */
-  }
-  
-  .page-header p {
-    font-size: 1.2rem; /* Added responsive size */
-  }
-}
-
-@media (max-width: 480px) {
-  .page-header h1 {
-    font-size: 2.4rem; /* Added smaller screen size */
-  }
-}
-
-/* Content section */
-.content-section {
-  background-color: var(--surface-dark);
-  border-radius: 16px;
-  padding: 2.5rem;
-  margin-bottom: 2.5rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  position: relative;
-  overflow: hidden;
-}
-
-.content-section::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 4px;
-  background: linear-gradient(to bottom, var(--primary-accent), var(--secondary-accent));
-}
-
-.content-section h2 {
-  color: var(--text-light);
-  font-size: 1.75rem;
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
-}
-
-.content-section p {
-  font-size: 1.1rem;
-  line-height: 1.7;
-  color: var(--text-muted);
-  margin-bottom: 1.5rem;
-}
-
-/* Team section for About page */
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-top: 2.5rem;
-}
-
-.team-member {
-  background-color: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
-  padding: 1.5rem;
-  text-align: center;
-  transition: transform 0.3s ease;
-}
-
-.team-member:hover {
-  transform: translateY(-5px);
-}
-
-.member-image {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  margin: 0 auto 1rem;
-  overflow: hidden;
-  border: 3px solid var(--primary-accent);
+.team-member:hover .member-image {
+  border-color: rgba(201, 176, 140, 0.4);
+  box-shadow: 0 0 20px var(--glow-champagne);
 }
 
 .member-image img {
@@ -309,124 +152,139 @@
 }
 
 .member-name {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: var(--text-light);
   margin-bottom: 0.5rem;
 }
 
 .member-role {
-  color: var(--primary-accent);
+  color: var(--blue);
   font-size: 0.9rem;
   margin-bottom: 1rem;
+  font-weight: 500;
 }
 
 .member-bio {
   color: var(--text-muted);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   line-height: 1.6;
 }
 
-/* Contact form */
-.contact-form {
-  margin-top: 2rem;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.75rem;
-  color: var(--text-light);
-  font-weight: 500;
-}
-
-/* Contact grid layout - improve spacing between sections */
+/* Contact grid */
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem; /* Reduced gap between contact info and form */
+  gap: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
-/* Contact form container - adjust width and spacing */
-.contact-form-container {
-  padding-top: 1rem;
-  max-width: 100%; /* Increased from 90% to fill available space */
-  margin: 0 auto;
+.contact-info {
+  padding-right: 1.5rem;
 }
 
-/* Form group - adjust input field width */
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 0.875rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.05);
+.contact-info h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.contact-info>p {
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* Contact methods */
+.contact-method {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.contact-method i {
+  font-size: 1.5rem;
+  color: var(--blue);
+  margin-right: 1.25rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(123, 147, 255, 0.05);
+  border: 1px solid rgba(123, 147, 255, 0.1);
+  border-radius: 14px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.contact-method:hover i {
+  background: rgba(123, 147, 255, 0.1);
+  box-shadow: 0 0 15px var(--glow-blue);
+  border-color: rgba(123, 147, 255, 0.2);
+}
+
+.contact-method h3 {
+  font-size: 1.2rem;
+  margin: 0 0 0.35rem;
   color: var(--text-light);
+  font-weight: 600;
+}
+
+.contact-method p {
+  margin: 0;
+  color: var(--text-muted);
   font-size: 1rem;
-  transition: all 0.3s ease;
-  max-width: 100%; /* Increased from 95% to fill available space */
 }
 
-/* Reduce vertical spacing between contact methods */
-.contact-method {
-  margin-bottom: 1.5rem; /* Reduced from 2rem */
-}
-
-/* Adjust spacing for social links */
+/* Social icons */
 .social-links {
-  margin-top: 1rem; /* Added to create some space after contact methods */
+  margin-top: 1.5rem;
 }
 
-.social-icons {
-  margin-bottom: 1rem; /* Reduced from 2.5rem */
+.social-links h3 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: var(--text-light);
+  font-weight: 600;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem; /* Further reduced on mobile */
-  }
-}
-
-
-/* Social Media Icons in Connect With Us section */
 .social-icons {
   display: flex;
-  gap: 1.5rem;
-  margin-top: 1rem;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .social-icons a {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: rgba(79, 70, 229, 0.1);
-  color: var(--primary-accent);
-  font-size: 1.25rem;
-  transition: all 0.3s ease;
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: rgba(123, 147, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(123, 147, 255, 0.1);
+  color: var(--blue);
+  font-size: 1.4rem;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   text-decoration: none;
 }
 
 .social-icons a:hover {
-  background-color: var(--primary-accent);
+  background: linear-gradient(135deg, var(--blue), var(--blue-deep));
   color: var(--text-light);
-  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 25px var(--glow-blue);
 }
 
-/* Ensure proper spacing between icon and text in Connect With Us section */
 .connect-with-us h3 {
   margin-bottom: 1.5rem;
 }
 
-/* If you're using a horizontal layout for the icons */
 .connect-with-us .social-links {
   display: flex;
   flex-direction: row;
@@ -435,399 +293,294 @@
 }
 
 .connect-with-us .social-links a {
-  color: var(--primary-accent);
+  color: var(--blue);
   transition: color 0.3s ease;
 }
 
 .connect-with-us .social-links a:hover {
-  color: var(--text-light);
+  color: var(--champagne);
 }
 
-/* Contact methods styling */
-.contact-method {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2rem;
+/* Contact form */
+.contact-form {
+  margin-top: 1.5rem;
 }
 
-.contact-method i {
-  font-size: 1.75rem; /* Increased icon size */
-  color: var(--primary-accent);
-  margin-right: 1.25rem;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(79, 70, 229, 0.1);
-  border-radius: 50%;
-}
-
-.contact-method h3 {
-  font-size: 1.4rem; /* Increased heading size */
-  margin: 0 0 0.5rem 0;
-  color: var(--text-light);
-}
-
-.contact-method p {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 1.1rem; /* Increased text size */
-}
-
-/* Social links styling - adjusted spacing and font sizes */
-.social-links h3 {
-  font-size: 1.6rem; /* Increased heading size further */
-  margin-bottom: 0.75rem; /* Reduced space between heading and icons */
-  color: var(--text-light);
-}
-
-.social-icons {
-  display: flex;
-  gap: 1.25rem;
-  margin-top: 0.5rem; /* Reduced space after heading */
-  margin-bottom: 2.5rem; /* Added space before the next section */
-}
-
-.social-icons a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px; /* Increased size */
-  height: 50px; /* Increased size */
-  border-radius: 50%;
-  background-color: rgba(79, 70, 229, 0.1);
-  color: var(--primary-accent);
-  font-size: 1.75rem; /* Increased icon size further */
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-
-.social-icons a:hover {
-  background-color: var(--primary-accent);
-  color: var(--text-light);
-  transform: translateY(-3px);
-}
-
-/* Contact grid layout - improve spacing between sections */
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem; /* Reduced gap between contact info and form */
-}
-
-/* Contact form container - adjust width and spacing */
 .contact-form-container {
-  padding-top: 1rem;
-  max-width: 100%; /* Increased from 90% to fill available space */
-  margin: 0 auto;
-}
-
-/* Form group - adjust input field width */
-/* Mobile-specific fixes for the contact form */
-@media (max-width: 768px) {
-  /* Fix overall container */
-  .content-section {
-    padding: 1.5rem;
-    overflow: hidden;
-  }
-  
-  /* Fix contact grid layout */
-  .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    width: 100%;
-  }
-  
-  /* Fix form container */
-  .contact-form-container {
-    width: 100%;
-    padding: 0;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-  
-  /* Fix form groups */
-  .form-group {
-    width: 100%;
-    margin-bottom: 1.25rem;
-    padding: 0;
-  }
-  
-  /* Fix input fields */
-  .form-group input,
-  .form-group textarea {
-    width: 100%;
-    max-width: 100%;
-    padding: 0.875rem;
-    box-sizing: border-box;
-    font-size: 16px; /* Prevent iOS zoom */
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  /* Fix input text handling */
-  input, textarea {
-    white-space: normal;
-    word-break: break-all;
-  }
-  
-  /* Fix submit button */
-  .submit-btn {
-    width: 100%;
-    margin-top: 1.5rem;
-    padding: 1rem 0;
-  }
-  
-  /* Fix contact info section */
-  .contact-info {
-    padding-right: 0;
-  }
-  
-  /* Prevent horizontal scrolling */
-  .page-container {
-    overflow-x: hidden;
-    max-width: 100vw;
-  }
-}
-
-/* Additional fixes for very small screens */
-@media (max-width: 480px) {
-  .form-group input,
-  .form-group textarea {
-    padding: 0.75rem;
-  }
-  
-  .contact-method {
-    margin-bottom: 1.25rem;
-  }
-}
-
-/* Reduce vertical spacing between contact methods */
-.contact-method {
-  margin-bottom: 1.5rem; /* Reduced from 2rem */
-}
-
-/* Adjust spacing for social links */
-.social-links {
-  margin-top: 1rem; /* Added to create some space after contact methods */
-}
-
-.social-icons {
-  margin-bottom: 1rem; /* Reduced from 2.5rem */
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem; /* Further reduced on mobile */
-  }
-}
-
-
-/* Social Media Icons in Connect With Us section */
-.social-icons {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-
-.social-icons a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: rgba(79, 70, 229, 0.1);
-  color: var(--primary-accent);
-  font-size: 1.25rem;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-
-.social-icons a:hover {
-  background-color: var(--primary-accent);
-  color: var(--text-light);
-  transform: translateY(-3px);
-}
-
-/* Contact grid layout - improve spacing between sections */
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem; /* Reduced gap between contact info and form */
-}
-
-/* Contact form container - adjust width and spacing */
-.contact-form-container {
-  padding-top: 1rem;
-  max-width: 100%; /* Increased from 90% to fill available space */
-  margin: 0 auto;
-}
-
-/* Form group - adjust input field width */
-.form-group input,
-.form-group textarea {
   width: 100%;
-  padding: 0.875rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.05);
-  color: var(--text-light);
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  max-width: 100%;
-  box-sizing: border-box;
+  padding-top: 0;
 }
 
-/* Reduce vertical spacing between contact methods */
-.contact-method {
-  margin-bottom: 1.5rem; /* Reduced from 2rem */
-}
-
-/* Adjust spacing for social links */
-.social-links {
-  margin-top: 1rem; /* Added to create some space after contact methods */
-}
-
-.social-icons {
-  margin-bottom: 1rem; /* Reduced from 2.5rem */
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem; /* Further reduced on mobile */
-  }
-}
-
-
-/* Social Media Icons in Connect With Us section */
-.social-icons {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-
-.social-icons a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: rgba(79, 70, 229, 0.1);
-  color: var(--primary-accent);
-  font-size: 1.25rem;
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-
-.social-icons a:hover {
-  background-color: var(--primary-accent);
-  color: var(--text-light);
-  transform: translateY(-3px);
-}
-
-/* Add responsive layout for mobile devices */
-@media (max-width: 768px) {
-  .contact-grid {
-    grid-template-columns: 1fr; /* Change to single column on mobile */
-    gap: 2rem;
-  }
-  
-  .contact-form-container {
-    max-width: 100%; /* Full width on mobile */
-    padding-top: 0;
-  }
-  
-  .form-group input,
-  .form-group textarea {
-    max-width: 100%; /* Full width inputs on mobile */
-  }
-  
-  .contact-info {
-    padding-right: 0; /* Remove right padding on mobile */
-  }
-  
-  /* Ensure submit button is visible and properly sized */
-  .submit-btn {
-    width: 100%; /* Full width button on mobile */
-    margin-top: 1.5rem;
-    padding: 1rem 0;
-  }
-}
-
-/* Additional mobile optimizations */
-@media (max-width: 480px) {
-  .content-section {
-    padding: 1.5rem;
-  }
-  
-  .contact-method {
-    margin-bottom: 1.5rem;
-  }
-  
-  .contact-method i {
-    width: 35px;
-    height: 35px;
-    font-size: 1.5rem;
-  }
-  
-  .social-icons a {
-    width: 40px;
-    height: 40px;
-    font-size: 1.5rem;
-  }
-}
-
-.contact-info {
-  padding-right: 2rem;
-}
-
-.contact-info h2 {
-  font-size: 2rem; /* Increased heading size */
-  margin-bottom: 1.5rem;
-}
-
-.contact-info > p {
-  font-size: 1.1rem; /* Increased text size */
-  margin-bottom: 2.5rem;
-  color: var(--text-muted);
-  line-height: 1.7;
-}
-
-/* Textarea specific styling for Your Message field */
-.form-group textarea {
-  min-height: 150px;
-  resize: vertical;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-/* Improve spacing in the form */
 .form-group {
   margin-bottom: 1.25rem;
 }
 
-/* Ensure proper spacing between form elements */
-.contact-form-container h2 {
-  margin-bottom: 1.5rem;
+.form-group label {
+  display: block;
+  margin-bottom: 0.6rem;
+  color: var(--text-light);
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
-/* Make sure the form takes proper width */
-.contact-form {
+.form-group input,
+.form-group textarea {
   width: 100%;
-  margin-top: 1rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--border-glass);
+  border-radius: var(--glass-radius-sm);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--text-light);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-/* Ensure the submit button has proper spacing */
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: rgba(123, 147, 255, 0.4);
+  box-shadow: 0 0 0 3px var(--glow-soft), 0 0 15px rgba(123, 147, 255, 0.06);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(124, 141, 181, 0.4);
+}
+
+/* Submit button â€” gold */
 .submit-btn {
-  margin-top: 1.5rem;
+  background: linear-gradient(135deg, var(--champagne), var(--champagne-light));
+  color: var(--midnight);
+  border: none;
+  border-radius: var(--glass-radius-sm);
   padding: 1rem 2.5rem;
-  min-width: 180px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 6px 24px var(--glow-champagne);
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transition: left 0.5s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(201, 176, 140, 0.4);
+}
+
+.submit-btn:hover::before {
+  left: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-container {
+    overflow-x: hidden;
+    max-width: 100vw;
+    padding: 1.5rem 1rem;
+    padding-top: 6.5rem;
+  }
+
+  .page-header {
+    margin-bottom: 2rem;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+    word-break: break-word;
+  }
+
+  .page-header p {
+    font-size: 1rem;
+  }
+
+  .content-section {
+    padding: 1.5rem 1.25rem;
+    margin-bottom: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .content-section:hover {
+    transform: none;
+  }
+
+  .content-section h2 {
+    font-size: 1.35rem;
+    word-break: break-word;
+  }
+
+  .content-section p {
+    font-size: 0.95rem;
+    word-break: break-word;
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .team-member {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .team-member:hover {
+    transform: none;
+  }
+
+  .member-image {
+    width: 90px;
+    height: 90px;
+  }
+
+  .member-name {
+    font-size: 1.05rem;
+  }
+
+  .member-bio {
+    font-size: 0.88rem;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .contact-info {
+    padding-right: 0;
+  }
+
+  .contact-info h2 {
+    font-size: 1.35rem;
+  }
+
+  .contact-method {
+    margin-bottom: 1.25rem;
+  }
+
+  .contact-method h3 {
+    font-size: 1.05rem;
+  }
+
+  .contact-method p {
+    font-size: 0.9rem;
+    word-break: break-word;
+  }
+
+  .contact-form-container {
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .contact-form-container h2 {
+    font-size: 1.35rem;
+  }
+
+  .form-group {
+    width: 100%;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    max-width: 100%;
+    font-size: 16px;
+    padding: 0.85rem 1rem;
+  }
+
+  .submit-btn {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 1rem 0;
+    min-height: 48px;
+  }
+
+  .social-icons {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .social-icons a {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container {
+    padding: 1rem 0.75rem;
+    padding-top: 6rem;
+  }
+
+  .page-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .page-header p {
+    font-size: 0.88rem;
+  }
+
+  .content-section {
+    padding: 1.25rem 1rem;
+  }
+
+  .content-section h2 {
+    font-size: 1.15rem;
+  }
+
+  .content-section p {
+    font-size: 0.9rem;
+  }
+
+  .team-member {
+    padding: 1.25rem 1rem;
+  }
+
+  .member-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 0.75rem;
+  }
+
+  .contact-method i {
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+  }
+
+  .social-icons a {
+    width: 40px;
+    height: 40px;
+    font-size: 1.15rem;
+    border-radius: 12px;
+  }
+
+  .social-links h3 {
+    text-align: center;
+  }
 }
