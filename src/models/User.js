@@ -28,11 +28,6 @@ const UserSchema = new mongoose.Schema({
   digitalType: {
     type: String,
     enum: [
-      'Careless Clicker',
-      'Password Reuser',
-      'Update Avoider',
-      'Oversharer',
-      'Security Savvy',
       'The Strategic Custodian',
       'The Technical Architect',
       'The Network Liaison',
@@ -240,10 +235,11 @@ UserSchema.methods.updateLastLogin = function () {
 // Method to generate OTP
 UserSchema.methods.generateOTP = function () {
   const otp = crypto.randomInt(100000, 1000000).toString(); // 6-digit cryptographically secure OTP
-  this.otpCode = otp;
+  // Store hashed OTP to prevent plaintext exposure if DB is compromised
+  this.otpCode = crypto.createHash('sha256').update(otp).digest('hex');
   this.otpExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes
   this.otpAttempts = 0;
-  return otp;
+  return otp; // Return plaintext to send via email
 };
 
 // Method to verify OTP
@@ -260,7 +256,9 @@ UserSchema.methods.verifyOTP = function (inputOTP) {
     return { valid: false, message: 'Too many OTP attempts' };
   }
 
-  if (this.otpCode !== inputOTP) {
+  // Compare hashed input against stored hash
+  const hashedInput = crypto.createHash('sha256').update(inputOTP).digest('hex');
+  if (this.otpCode !== hashedInput) {
     this.otpAttempts += 1;
     return { valid: false, message: 'Invalid OTP' };
   }
@@ -294,22 +292,7 @@ UserSchema.methods.wasPasswordRecentlyChanged = function () {
   return daysSinceChange <= 30; // Consider "recent" if changed within 30 days
 };
 
-// Method to check if provided password matches previous password
-UserSchema.methods.compareWithPreviousPassword = async function (candidatePassword) {
-  if (!this.previousPasswordHash) return false;
-  try {
-    // Check if the hash is Argon2 (starts with $argon2)
-    if (this.previousPasswordHash.startsWith('$argon2')) {
-      return await argon2.verify(this.previousPasswordHash, candidatePassword);
-    }
-    // Fallback to bcrypt for backward compatibility
-    else {
-      return await bcrypt.compare(candidatePassword, this.previousPasswordHash);
-    }
-  } catch (error) {
-    return false;
-  }
-};
+
 
 // Index for better query performance
 UserSchema.index({ resetToken: 1 });

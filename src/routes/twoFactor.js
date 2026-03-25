@@ -169,9 +169,19 @@ router.post('/verify', twoFactorLimit, async (req, res) => {
         }
       }
     } else if (method === 'backup') {
-      // Verify backup code
+      // Verify backup code using timing-safe comparison
       const backupCode = user.twoFactorBackupCodes.find(
-        code => code.code === token && !code.used
+        code => {
+          if (code.used) return false;
+          try {
+            return crypto.timingSafeEqual(
+              Buffer.from(code.code, 'utf8'),
+              Buffer.from(token.padEnd(code.code.length), 'utf8').subarray(0, Buffer.byteLength(code.code, 'utf8'))
+            ) && code.code.length === token.length;
+          } catch {
+            return false;
+          }
+        }
       );
       if (backupCode) {
         backupCode.used = true;
@@ -186,11 +196,14 @@ router.post('/verify', twoFactorLimit, async (req, res) => {
     await user.save();
 
     if (isValid) {
-      // Complete the login process
-      const accessToken = generateAccessToken(user);
+      // Complete the login process with fingerprint for sidejacking protection
+      const fingerprint = crypto.randomBytes(32).toString('hex');
+      const fingerprintHash = crypto.createHash('sha256').update(fingerprint).digest('hex');
+
+      const accessToken = generateAccessToken(user, fingerprintHash);
       const refreshToken = await generateRefreshToken(user, ipAddress);
 
-      setAuthCookies(res, accessToken, refreshToken);
+      setAuthCookies(res, accessToken, refreshToken, fingerprint);
 
       res.json({
         success: true,
@@ -234,9 +247,19 @@ router.post('/backup-code', authenticateToken, validate(twoFactorBackupSchema), 
         user.emailOtpAttempts = (user.emailOtpAttempts || 0) + 1;
       }
     } else if (useBackupCode) {
-      // Verify backup code
+      // Verify backup code using timing-safe comparison
       const backupCode = user.twoFactorBackupCodes.find(
-        code => code.code === token && !code.used
+        code => {
+          if (code.used) return false;
+          try {
+            return crypto.timingSafeEqual(
+              Buffer.from(code.code, 'utf8'),
+              Buffer.from(token.padEnd(code.code.length), 'utf8').subarray(0, Buffer.byteLength(code.code, 'utf8'))
+            ) && code.code.length === token.length;
+          } catch {
+            return false;
+          }
+        }
       );
       if (backupCode) {
         backupCode.used = true;
@@ -273,9 +296,8 @@ router.post('/send-email-otp', twoFactorLimit, async (req, res) => {
     // console.log('User 2FA enabled:', user ? user.twoFactorEnabled : 'No user');
 
     if (!user || !user.twoFactorEnabled) {
-      // Remove this debug line:
-      // console.log('Send Email OTP failed: Invalid request');
-      return res.status(400).json({ error: 'Invalid request' });
+      // Return generic success to prevent user enumeration
+      return res.json({ message: 'If 2FA is enabled, an email OTP has been sent' });
     }
 
     // Generate and send email OTP

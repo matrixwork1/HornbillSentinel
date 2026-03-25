@@ -45,8 +45,6 @@ const getCookie = (name) => {
 
 // Helper function to clear expired tokens
 const clearExpiredTokens = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('accessToken');
   // Clear cookies by setting them to expire
   document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
   document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -64,13 +62,11 @@ export const getCSRFToken = async () => {
   return CSRF_CACHE_TOKEN;
 };
 
-// Function to get the best available token
+// Function to get the best available token from httpOnly cookies
 const getBestToken = () => {
-  // Priority: localStorage token > cookie token > cookie accessToken
-  return localStorage.getItem('token') || 
-         getCookie('token') || 
-         getCookie('accessToken') ||
-         localStorage.getItem('accessToken');
+  // Rely exclusively on httpOnly cookies for security
+  return getCookie('token') || 
+         getCookie('accessToken');
 };
 
 // Function to make unauthenticated requests with CSRF token only

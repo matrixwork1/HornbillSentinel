@@ -47,9 +47,6 @@ export const AuthProvider = ({ children }) => {
       console.error('Logout error:', error);
     } finally {
       setUser(null);
-      // Clear any stored tokens
-      localStorage.removeItem('token');
-      localStorage.removeItem('accessToken');
     }
   };
 
@@ -61,9 +58,6 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Auth refresh failed:', error);
       setUser(null);
-      // Clear any stored tokens
-      localStorage.removeItem('token');
-      localStorage.removeItem('accessToken');
     } finally {
       setLoading(false);
     }

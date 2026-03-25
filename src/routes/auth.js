@@ -8,7 +8,6 @@ const RefreshToken = require('../models/RefreshToken');
 const { sendResetEmail, sendOTPEmail } = require('../utils/email');
 const crypto = require('crypto');
 const auth = require('../middleware/auth');
-const xss = require('xss');
 
 // Cross-origin cookie setting: 'none' in production (Vercel → Cloud Run), 'strict' in dev
 const sameSiteValue = process.env.NODE_ENV === 'production' ? 'none' : 'strict';
@@ -339,7 +338,12 @@ router.post('/reset-password-with-token', validate(resetPasswordSchema), async (
     user.resetToken = undefined;
     user.resetTokenExpiry = undefined;
 
+    // Increment token version to invalidate all existing sessions
+    user.tokenVersion = (user.tokenVersion || 0) + 1;
     await user.save();
+
+    // Revoke all refresh tokens for this user
+    await RefreshToken.deleteMany({ userId: user._id });
 
     res.json({ message: 'Password reset successful' });
   } catch (error) {
@@ -389,7 +393,13 @@ router.put('/reset-password', auth, async (req, res) => {
 
     // Update password (will be hashed by pre-save middleware)
     user.password = newPassword;
+
+    // Increment token version to invalidate all existing sessions
+    user.tokenVersion = (user.tokenVersion || 0) + 1;
     await user.save();
+
+    // Revoke all refresh tokens for this user
+    await RefreshToken.deleteMany({ userId: user._id });
 
     // Invalidate current session by clearing cookie and requiring re-login
     clearTokenCookie(res);
@@ -539,7 +549,8 @@ router.post('/verify-otp', async (req, res) => {
     // Find user by email
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      // Return generic error to prevent user enumeration
+      return res.status(400).json({ message: 'Invalid or expired verification code' });
     }
 
     // Verify OTP

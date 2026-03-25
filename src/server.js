@@ -113,7 +113,7 @@ const isAuthenticatedRequest = (req) => {
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 5,
+  max: 10,
   message: {
     error: 'Too many login attempts, please try again later.',
     retryAfter: 15 * 60
@@ -127,7 +127,7 @@ const loginLimiter = rateLimit({
 
 const passwordResetLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
+  max: 15,
   message: {
     error: 'Too many password reset attempts, please try again later.',
     retryAfter: 15 * 60
@@ -141,7 +141,7 @@ const passwordResetLimiter = rateLimit({
 
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: process.env.NODE_ENV === 'production' ? 100 : 1000,
+  max: process.env.NODE_ENV === 'production' ? 300 : 1000,
   message: {
     error: 'Too many requests, please try again later.'
   },
@@ -154,7 +154,7 @@ const generalLimiter = rateLimit({
 
 const assessmentLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: process.env.NODE_ENV === 'production' ? 300 : 2000,
+  max: process.env.NODE_ENV === 'production' ? 500 : 2000,
   message: {
     error: 'Too many assessment requests, please slow down.'
   },
@@ -186,7 +186,8 @@ const corsOptions = {
     // Check exact match against allowed origins
     if (allowedOrigins.includes(origin)) return callback(null, true);
     // Allow Vercel preview deployment URLs (pattern: *-<project>.vercel.app)
-    if (origin.endsWith('.vercel.app')) return callback(null, true);
+    // Only allow Vercel preview deployments for this specific project
+    if (/^https:\/\/[a-z0-9-]+-hornbillsentinel[a-z0-9-]*\.vercel\.app$/.test(origin)) return callback(null, true);
     return callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
@@ -211,13 +212,8 @@ if (process.env.NODE_ENV !== 'test') {
     return csrfProtection(req, res, next);
   });
   app.use('/api/assessment', csrfProtection);
-  // Apply CSRF protection to two-factor routes (excluding verify during login)
-  app.use('/api/two-factor', (req, res, next) => {
-    if (req.path === '/verify') {
-      return next(); // Skip CSRF for 2FA verification during login
-    }
-    return csrfProtection(req, res, next);
-  });
+  // Apply CSRF protection to all two-factor routes
+  app.use('/api/two-factor', csrfProtection);
 }
 
 // Connect to MongoDB only if not in test environment
