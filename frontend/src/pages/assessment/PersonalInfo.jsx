@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../QuestionnaireStyles.css';
-import { useLanguage } from '../context/LanguageContext';
+import './QuestionnaireStyles.css';
+import { useLanguage } from '../../context/LanguageContext';
 
 const ageOptions = [
   'Under 18',
@@ -43,6 +43,50 @@ const occupationOptions = [
   'Other (please specify)',
   'Unemployed',
 ];
+
+const OPTION_KEY_MAP = {
+  ageGroup: {
+    'Under 18': 'opt_age_under_18',
+    '18 - 24': 'opt_age_18_24',
+    '25 - 34': 'opt_age_25_34',
+    '35 - 44': 'opt_age_35_44',
+    '45 - 54': 'opt_age_45_54',
+    '55 - 64': 'opt_age_55_64',
+    '65 or above': 'opt_age_65_plus',
+  },
+  gender: {
+    'Male': 'opt_gender_male',
+    'Female': 'opt_gender_female',
+    'Prefer not to say': 'opt_gender_na',
+  },
+  education: {
+    'No formal education': 'opt_edu_none',
+    'Primary/Secondary School': 'opt_edu_school',
+    'Diploma/Certificate': 'opt_edu_diploma',
+    "Bachelor's Degree": 'opt_edu_bachelor',
+    "Master's Degree": 'opt_edu_master',
+    'Doctorate (Ph.D.) or higher': 'opt_edu_phd',
+    'Other': 'opt_other',
+  },
+  occupation: {
+    'Agriculture/Farming/Fisheries': 'opt_occ_agriculture',
+    'Banking/Finance/Insurance': 'opt_occ_banking',
+    'Biotechnology/Life Sciences/Healthcare': 'opt_occ_biotech',
+    'Building/Construction/Engineering': 'opt_occ_construction',
+    'Business/Management/Consulting': 'opt_occ_business',
+    'Creative/Design/Media': 'opt_occ_creative',
+    'Customer Service/Sales/Retail': 'opt_occ_customer',
+    'Education/Academia': 'opt_occ_education',
+    'Government/Public Safety/Legal': 'opt_occ_gov',
+    'IT/Computers/Electronics': 'opt_occ_it',
+    'Manufacturing/Operations/Logistics': 'opt_occ_manufacturing',
+    'Hospitality/Food Services': 'opt_occ_hospitality',
+    'Student': 'opt_occ_student',
+    'Retired': 'opt_occ_retired',
+    'Other (please specify)': 'opt_occ_other',
+    'Unemployed': 'opt_occ_unemployed',
+  },
+};
 
 function PersonalInfo() {
   const navigate = useNavigate();
@@ -88,52 +132,8 @@ function PersonalInfo() {
         <h2>{current.label}</h2>
         <div className="options">
           {current.options.map((opt) => {
-            const mapKey = (val) => {
-              if (current.key==='ageGroup') {
-                if (val==='Under 18') return 'opt_age_under_18';
-                if (val==='18 - 24') return 'opt_age_18_24';
-                if (val==='25 - 34') return 'opt_age_25_34';
-                if (val==='35 - 44') return 'opt_age_35_44';
-                if (val==='45 - 54') return 'opt_age_45_54';
-                if (val==='55 - 64') return 'opt_age_55_64';
-                if (val==='65 or above') return 'opt_age_65_plus';
-              }
-              if (current.key==='gender') {
-                if (val==='Male') return 'opt_gender_male';
-                if (val==='Female') return 'opt_gender_female';
-                if (val==='Prefer not to say') return 'opt_gender_na';
-              }
-              if (current.key==='education') {
-                if (val==='No formal education') return 'opt_edu_none';
-                if (val==='Primary/Secondary School') return 'opt_edu_school';
-                if (val==='Diploma/Certificate') return 'opt_edu_diploma';
-                if (val==="Bachelor's Degree") return 'opt_edu_bachelor';
-                if (val==="Master's Degree") return 'opt_edu_master';
-                if (val==='Doctorate (Ph.D.) or higher') return 'opt_edu_phd';
-                if (val==='Other') return 'opt_other';
-              }
-              if (current.key==='occupation') {
-                if (val==='Agriculture/Farming/Fisheries') return 'opt_occ_agriculture';
-                if (val==='Banking/Finance/Insurance') return 'opt_occ_banking';
-                if (val==='Biotechnology/Life Sciences/Healthcare') return 'opt_occ_biotech';
-                if (val==='Building/Construction/Engineering') return 'opt_occ_construction';
-                if (val==='Business/Management/Consulting') return 'opt_occ_business';
-                if (val==='Creative/Design/Media') return 'opt_occ_creative';
-                if (val==='Customer Service/Sales/Retail') return 'opt_occ_customer';
-                if (val==='Education/Academia') return 'opt_occ_education';
-                if (val==='Government/Public Safety/Legal') return 'opt_occ_gov';
-                if (val==='IT/Computers/Electronics') return 'opt_occ_it';
-                if (val==='Manufacturing/Operations/Logistics') return 'opt_occ_manufacturing';
-                if (val==='Hospitality/Food Services') return 'opt_occ_hospitality';
-                if (val==='Student') return 'opt_occ_student';
-                if (val==='Retired') return 'opt_occ_retired';
-                if (val==='Other (please specify)') return 'opt_occ_other';
-                if (val==='Unemployed') return 'opt_occ_unemployed';
-              }
-              return null;
-            };
-            const key = mapKey(opt);
-            const label = key ? t(key) : opt;
+            const i18nKey = OPTION_KEY_MAP[current.key]?.[opt];
+            const label = i18nKey ? t(i18nKey) : opt;
             return (
               <button
                 key={opt}

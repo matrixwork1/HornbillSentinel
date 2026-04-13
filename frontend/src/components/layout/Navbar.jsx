@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { useLanguage } from '../context/LanguageContext';
-import '../NavbarStyles.css';
-import logo from '../images/logo.png';
+import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
+import './Navbar.css';
+import logo from '../../assets/logo.png';
 
 const Navbar = () => {
   const [click, setClick] = useState(false);

@@ -11,6 +11,10 @@ A full-stack web application for security-focused "Digital Type" personality ass
 ```
 ├── src/                 # Express API, middleware, models, utils
 ├── frontend/            # React application
+│   ├── src/pages/       # Route-level domains (auth, assessment)
+│   ├── src/components/  # Shared UI and layout elements
+│   ├── src/hooks/       # Custom React hooks (e.g. usePasswordValidation)
+│   └── src/context/     # Context providers
 ├── tests/               # Backend security tests
 ├── scripts/             # Utility scripts
 └── .env.example         # Environment variable template

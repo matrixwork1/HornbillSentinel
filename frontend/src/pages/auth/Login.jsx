@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { makeUnauthenticatedRequest } from '../utils/csrf';
-import '../AuthStyles.css';
-import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../../context/AuthContext';
+import { makeUnauthenticatedRequest } from '../../utils/csrf';
+import { useLanguage } from '../../context/LanguageContext';
+import './AuthStyles.css';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -46,7 +46,6 @@ const Login = () => {
         password
       });
   
-      // Check if 2FA is required
       if (response.data.requiresTwoFactor) {
         setShow2FA(true);
         setUserId(response.data.userId);
@@ -54,7 +53,6 @@ const Login = () => {
         return;
       }
   
-      // Use AuthContext login function
       login(response.data.user);
       navigate('/dashboard');
     } catch (err) {
@@ -79,7 +77,6 @@ const Login = () => {
     setError('');
     
     try {
-      // Your verification logic here
       const response = await makeUnauthenticatedRequest('post', '/api/two-factor/verify', {
         userId,
         token: verificationCode,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../QuestionnaireStyles.css';
-import { useLanguage } from '../context/LanguageContext';
+import './QuestionnaireStyles.css';
+import { useLanguage } from '../../context/LanguageContext';
 
 function AssessmentStart() {
   const navigate = useNavigate();

@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { makeUnauthenticatedRequest } from '../utils/csrf';
+import { useAuth } from '../../context/AuthContext';
+import { makeUnauthenticatedRequest } from '../../utils/csrf';
+import { usePasswordValidation, isPasswordValid } from '../../hooks/usePasswordValidation';
+import './AuthStyles.css';
 
 const Register = () => {
   const [formData, setFormData] = useState({
     firstName: '',
-    // lastName removed
     email: '',
     password: '',
     password2: ''
@@ -15,64 +16,21 @@ const Register = () => {
   const [errors, setErrors] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
-  const [passwordValidation, setPasswordValidation] = useState({
-    hasUppercase: false,
-    hasLowercase: false,
-    hasNumber: false,
-    hasSpecialChar: false,
-    hasMinLength: false
-  });
-  const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
-  // Add password matching state
-  const [passwordsMatch, setPasswordsMatch] = useState(false);
-  const [showPasswordMatchIndicators, setShowPasswordMatchIndicators] = useState(false);
   
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const { firstName, email, password, password2 } = formData;
 
-  // Password validation function
-  const validatePassword = (password) => {
-    return {
-      hasUppercase: /[A-Z]/.test(password),
-      hasLowercase: /[a-z]/.test(password),
-      hasNumber: /\d/.test(password),
-      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
-      hasMinLength: password.length >= 12
-    };
-  };
-
-  // Check if password meets all requirements
-  const isPasswordValid = (validation) => {
-    return Object.values(validation).every(Boolean);
-  };
-
-  // Check if passwords match
-  useEffect(() => {
-    if (password && password2) {
-      const match = password === password2;
-      setPasswordsMatch(match);
-      setShowPasswordMatchIndicators(true);
-    } else {
-      setShowPasswordMatchIndicators(false);
-      setPasswordsMatch(false);
-    }
-  }, [password, password2]);
-
-  useEffect(() => {
-    if (password) {
-      const validation = validatePassword(password);
-      setPasswordValidation(validation);
-      setShowPasswordRequirements(!isPasswordValid(validation));
-    } else {
-      setShowPasswordRequirements(false);
-    }
-  }, [password]);
+  const {
+    passwordValidation,
+    showPasswordRequirements,
+    passwordsMatch,
+    showPasswordMatchIndicators,
+  } = usePasswordValidation(password, password2);
 
   const onChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    // Clear errors when user starts typing
     if (errors.length > 0) setErrors([]);
   };
 
@@ -89,7 +47,6 @@ const Register = () => {
     setLoading(true);
     setErrors([]);
   
-    // Client-side validation
     const newErrors = [];
     
     if (password !== password2) {
@@ -113,15 +70,11 @@ const Register = () => {
         password
       });
 
-      // Use AuthContext login function
       login(response.data.user);
-
-      // Redirect to dashboard
       navigate('/dashboard');
     } catch (err) {
-      console.error('Registration error:', err); // Add logging for debugging
+      console.error('Registration error:', err);
       if (err.response?.data?.details) {
-        // Handle Zod validation errors
         setErrors(err.response.data.details.map(detail => detail.message));
       } else if (err.response?.data?.errors) {
         setErrors(err.response.data.errors.map(error => error.msg || error));
@@ -160,8 +113,6 @@ const Register = () => {
             />
           </div>
           
-          {/* Last Name field removed */}
-          
           <div className="form-group">
             <label htmlFor="email">Email Address</label>
             <input
@@ -178,8 +129,6 @@ const Register = () => {
               placeholder="Enter your email address"
             />
           </div>
-          
-          {/* Date of Birth field already removed */}
           
           <div className="form-group">
             <label htmlFor="password">Password</label>

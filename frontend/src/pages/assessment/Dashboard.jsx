@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import '../DashboardStyles.css';
-import { useLanguage } from '../context/LanguageContext';
-import { makeAuthenticatedRequest } from '../utils/csrf';
+import { useAuth } from '../../context/AuthContext';
+import './DashboardStyles.css';
+import { useLanguage } from '../../context/LanguageContext';
+import { makeAuthenticatedRequest } from '../../utils/csrf';
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -12,6 +12,7 @@ const Dashboard = () => {
   const { user, isAuthenticated } = useAuth();
   const location = useLocation();
   const { t, formatDate } = useLanguage();
+
   const typeLabel = (s) => {
     if (s === 'Security Savvy') return t('type_security_savvy');
     if (s === 'Careless Clicker') return t('type_careless_clicker');
@@ -21,15 +22,15 @@ const Dashboard = () => {
     if (s === 'New to Digital') return t('type_new_to_digital');
     return s;
   };
+
   const recLabel = (s) => {
     if (s === 'Start with basic device safety tutorials') return t('dash_rec_start_tutorials');
     if (s === 'Learn about strong passwords and account security') return t('dash_rec_passwords_security');
     if (s === 'Seek guidance before clicking links or downloading apps') return t('dash_rec_guidance_links_apps');
     return s;
   };
+
   const skippedAssessment = location.state?.skippedAssessment;
-  // Remove this line if not used:
-  // const navigate = useNavigate();
 
   useEffect(() => {
     const loadData = async () => {
@@ -89,7 +90,6 @@ const Dashboard = () => {
     loadData();
   }, [isAuthenticated, skippedAssessment]);
 
-  // Show login prompt if not authenticated
   if (!isAuthenticated && !loading && !skippedAssessment) {
     return (
       <div className="dashboard-container">

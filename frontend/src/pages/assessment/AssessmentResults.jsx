@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import '../DashboardStyles.css';
+import './DashboardStyles.css';
 import { Radar, Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -14,8 +14,8 @@ import {
   LinearScale,
   BarElement,
 } from 'chart.js';
-import { useLanguage } from '../context/LanguageContext';
-import { makeUnauthenticatedRequest } from '../utils/csrf';
+import { useLanguage } from '../../context/LanguageContext';
+import { makeUnauthenticatedRequest } from '../../utils/csrf';
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
 
 const AssessmentResults = () => {
@@ -31,6 +31,7 @@ const AssessmentResults = () => {
       }
     }
   } catch {}
+
   const mapRiskLabel = (k) => {
     const key = String(k || '');
     const base = {
@@ -106,6 +107,7 @@ const AssessmentResults = () => {
     return c;
   };
   const labelsLocalized = labels.map(mapCategory);
+
   const mapTypeName = (s) => {
     const n = String(s || '');
     if (n.includes('Strategic Custodian')) return t('type_strategic_custodian');
@@ -242,7 +244,7 @@ const AssessmentResults = () => {
                   datasets: [{
                     label: t('category_scores_label'),
                     data: values,
-                    backgroundColor: values.map(v=> v>=80 ? 'rgba(16,185,129,0.6)' : v>=60 ? 'rgba(245,158,11,0.6)' : 'rgba(239,68,68,0.6)')
+                    backgroundColor: values.map(v=>v>=80 ? 'rgba(16,185,129,0.6)' : v>=60 ? 'rgba(245,158,11,0.6)' : 'rgba(239,68,68,0.6)')
                   }]
                 }}
                 options={{
@@ -350,8 +352,8 @@ const AssessmentResults = () => {
           <div className="chip-section">
             <div className="chip-title">{t('vulnerability_topics')}</div>
             <div className="chip-list">
-              {result.vulnerabilityTopics.map((t, i) => (
-                <span className="chip" key={i}>{mapCategory(t)}</span>
+              {result.vulnerabilityTopics.map((topic, i) => (
+                <span className="chip" key={i}>{mapCategory(topic)}</span>
               ))}
             </div>
           </div>
@@ -384,8 +386,6 @@ const AssessmentResults = () => {
             </div>
           </div>
         )}
-
-        
 
         <div className="dashboard-actions" style={{ marginTop: '16px' }}>
           <Link to="/assessment-start" className="dashboard-button">{t('retake_assessment')}</Link>

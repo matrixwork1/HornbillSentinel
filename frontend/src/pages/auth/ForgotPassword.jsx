@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { makeUnauthenticatedRequest } from '../utils/csrf';
-import '../AuthStyles.css';
+import { makeUnauthenticatedRequest } from '../../utils/csrf';
+import { usePasswordValidation, isPasswordValid, validatePassword } from '../../hooks/usePasswordValidation';
+import './AuthStyles.css';
 
 const ForgotPassword = () => {
   const [step, setStep] = useState(1);
@@ -9,25 +10,12 @@ const ForgotPassword = () => {
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  // Remove resetToken if it's not used elsewhere, or keep it if needed
   const [resetToken, setResetToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [otpTimer, setOtpTimer] = useState(0);
   const [canResendOtp, setCanResendOtp] = useState(false);
-  
-  // Remove unused password validation variables if they're not used
-  const [passwordValidation, setPasswordValidation] = useState({
-    hasUppercase: false,
-    hasLowercase: false,
-    hasNumber: false,
-    hasSpecialChar: false,
-    hasMinLength: false
-  });
-  const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
-  const [passwordsMatch, setPasswordsMatch] = useState(false);
-  const [showPasswordMatchIndicators, setShowPasswordMatchIndicators] = useState(false);
   const [showPasswords, setShowPasswords] = useState({
     new: false,
     confirm: false
@@ -35,43 +23,12 @@ const ForgotPassword = () => {
   
   const navigate = useNavigate();
 
-  // Password validation function
-  const validatePassword = (password) => {
-    return {
-      hasUppercase: /[A-Z]/.test(password),
-      hasLowercase: /[a-z]/.test(password),
-      hasNumber: /\d/.test(password),
-      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
-      hasMinLength: password.length >= 12
-    };
-  };
-
-  // Check if password meets all requirements
-  const isPasswordValid = (validation) => {
-    return Object.values(validation).every(Boolean);
-  };
-
-  // Check if passwords match
-  useEffect(() => {
-    if (newPassword && confirmPassword) {
-      const match = newPassword === confirmPassword;
-      setPasswordsMatch(match);
-      setShowPasswordMatchIndicators(true);
-    } else {
-      setShowPasswordMatchIndicators(false);
-      setPasswordsMatch(false);
-    }
-  }, [newPassword, confirmPassword]);
-
-  useEffect(() => {
-    if (newPassword) {
-      const validation = validatePassword(newPassword);
-      setPasswordValidation(validation);
-      setShowPasswordRequirements(true);
-    } else {
-      setShowPasswordRequirements(false);
-    }
-  }, [newPassword]);
+  const {
+    passwordValidation,
+    showPasswordRequirements,
+    passwordsMatch,
+    showPasswordMatchIndicators,
+  } = usePasswordValidation(newPassword, confirmPassword);
 
   // OTP Timer Effect
   useEffect(() => {
@@ -92,7 +49,6 @@ const ForgotPassword = () => {
     return () => clearInterval(interval);
   }, [otpTimer, step]);
 
-  // Format timer display (MM:SS)
   const formatTimer = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -110,11 +66,11 @@ const ForgotPassword = () => {
       setMessage(response.data.message);
       if (response.data.success) {
         setStep(2);
-        setOtpTimer(600); // 10 minutes = 600 seconds
+        setOtpTimer(600);
         setCanResendOtp(false);
       }
-    } catch (error) {
-      setError(error.response?.data?.message || 'Failed to send reset code');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to send reset code');
     } finally {
       setLoading(false);
     }
@@ -128,10 +84,10 @@ const ForgotPassword = () => {
     try {
       await makeUnauthenticatedRequest('POST', '/api/auth/forgot-password', { email });
       setMessage('New verification code sent!');
-      setOtpTimer(600); // Reset timer to 10 minutes
+      setOtpTimer(600);
       setCanResendOtp(false);
-    } catch (error) {
-      setError(error.response?.data?.message || 'Failed to resend code');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to resend code');
     } finally {
       setLoading(false);
     }
@@ -150,8 +106,8 @@ const ForgotPassword = () => {
         setMessage('OTP verified! Please enter your new password.');
         setStep(3);
       }
-    } catch (error) {
-      setError(error.response?.data?.message || 'Invalid or expired OTP');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Invalid or expired OTP');
     } finally {
       setLoading(false);
     }
@@ -183,14 +139,13 @@ const ForgotPassword = () => {
       });
       setMessage('Password reset successfully! Redirecting to login...');
       setTimeout(() => navigate('/login'), 2000);
-    } catch (error) {
-      setError(error.response?.data?.message || 'Failed to reset password');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to reset password');
     } finally {
       setLoading(false);
     }
   };
 
-  // Add the missing togglePasswordVisibility function
   const togglePasswordVisibility = (field) => {
     setShowPasswords(prev => ({
       ...prev,
@@ -227,31 +182,16 @@ const ForgotPassword = () => {
               <p>We've sent a 6-digit verification code to {email}</p>
               
               {/* OTP Timer Display */}
-              <div className="otp-timer-container" style={{ 
-                textAlign: 'center', 
-                margin: '15px 0',
-                padding: '10px',
-                backgroundColor: '#f8f9fa',
-                borderRadius: '8px',
-                border: '1px solid #e9ecef'
-              }}>
+              <div className="otp-timer-container">
                 {otpTimer > 0 ? (
                   <div>
-                    <p style={{ margin: '0 0 5px 0', fontSize: '14px', color: '#666' }}>
-                      Code expires in:
-                    </p>
-                    <p style={{ 
-                      margin: '0', 
-                      fontSize: '18px', 
-                      fontWeight: 'bold', 
-                      color: otpTimer <= 60 ? '#dc3545' : '#007bff',
-                      fontFamily: 'monospace'
-                    }}>
+                    <p className="otp-timer-label">Code expires in:</p>
+                    <p className={`otp-timer-value ${otpTimer <= 60 ? 'otp-timer-urgent' : ''}`}>
                       {formatTimer(otpTimer)}
                     </p>
                   </div>
                 ) : (
-                  <p style={{ margin: '0', fontSize: '14px', color: '#dc3545' }}>
+                  <p className="otp-timer-expired">
                     Verification code has expired
                   </p>
                 )}
@@ -266,7 +206,7 @@ const ForgotPassword = () => {
                   required
                   placeholder="Enter 6-digit code"
                   maxLength="6"
-                  style={{ textAlign: 'center', fontSize: '18px', letterSpacing: '2px' }}
+                  className="otp-input"
                 />
               </div>
               
@@ -274,14 +214,12 @@ const ForgotPassword = () => {
                 {loading ? 'Verifying...' : 'Verify Code'}
               </button>
               
-              {/* Resend OTP Button */}
               {canResendOtp && (
                 <button 
                   type="button" 
                   className="auth-button secondary" 
                   onClick={handleResendOtp}
                   disabled={loading}
-                  style={{ marginTop: '10px' }}
                 >
                   {loading ? 'Sending...' : 'Resend Verification Code'}
                 </button>
@@ -296,7 +234,6 @@ const ForgotPassword = () => {
                   setCanResendOtp(false);
                   setOtp('');
                 }}
-                style={{ marginTop: '10px' }}
               >
                 Back to Email
               </button>
@@ -330,7 +267,6 @@ const ForgotPassword = () => {
                   </button>
                 </div>
                 
-                {/* Password Requirements Display */}
                 {showPasswordRequirements && (
                   <div className="password-requirements">
                     <p>Password must contain:</p>

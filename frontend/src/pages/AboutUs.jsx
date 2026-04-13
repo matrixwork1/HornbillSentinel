@@ -1,5 +1,5 @@
 import React from 'react';
-import '../AboutContactStyles.css';
+import './AboutContactStyles.css';
 import { useLanguage } from '../context/LanguageContext';
 
 const AboutUs = () => {

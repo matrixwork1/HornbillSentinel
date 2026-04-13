@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { makeAuthenticatedRequest } from '../utils/csrf';
-import '../AuthStyles.css';
-import '../AboutContactStyles.css'; // Import to use page-container styling
+import { makeAuthenticatedRequest } from '../../utils/csrf';
+import { usePasswordValidation, validatePassword, isPasswordValid } from '../../hooks/usePasswordValidation';
+import './AuthStyles.css';
+import '../AboutContactStyles.css';
 
 const AccountSettings = () => {
   const { user, logout } = useAuth();
@@ -23,7 +24,7 @@ const AccountSettings = () => {
     confirm: false
   });
   
-  // Add 2FA state
+  // 2FA state
   const [twoFactorData, setTwoFactorData] = useState({
     enabled: false,
     secret: '',
@@ -35,18 +36,13 @@ const AccountSettings = () => {
   });
   const [twoFactorLoading, setTwoFactorLoading] = useState(false);
   
-  // Add password validation state
-  const [passwordValidation, setPasswordValidation] = useState({
-    hasUppercase: false,
-    hasLowercase: false,
-    hasNumber: false,
-    hasSpecialChar: false,
-    hasMinLength: false
-  });
-  const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
-  // Add password matching state
-  const [passwordsMatch, setPasswordsMatch] = useState(false);
-  const [showPasswordMatchIndicators, setShowPasswordMatchIndicators] = useState(false);
+  // Use shared password validation hook
+  const {
+    passwordValidation,
+    showPasswordRequirements,
+    passwordsMatch,
+    showPasswordMatchIndicators,
+  } = usePasswordValidation(passwordResetData.newPassword, passwordResetData.confirmPassword);
 
   // Check 2FA status on component mount
   useEffect(() => {
@@ -55,17 +51,16 @@ const AccountSettings = () => {
         const response = await makeAuthenticatedRequest('get', '/api/two-factor/status');
         setTwoFactorData(prev => ({
           ...prev,
-          enabled: response.data.twoFactorEnabled // Fix: use correct property name
+          enabled: response.data.twoFactorEnabled
         }));
-      } catch (error) {
-        console.error('Failed to check 2FA status:', error);
+      } catch (err) {
+        console.error('Failed to check 2FA status:', err);
       }
     };
     
     check2FAStatus();
   }, []);
 
-  // 2FA Setup function
   const setup2FA = async () => {
     setTwoFactorLoading(true);
     setError('');
@@ -77,14 +72,13 @@ const AccountSettings = () => {
         qrCode: response.data.qrCode,
         showSetup: true
       }));
-    } catch (error) {
-      setError(error.response?.data?.error || 'Failed to setup 2FA');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to setup 2FA');
     } finally {
       setTwoFactorLoading(false);
     }
   };
 
-  // Verify and enable 2FA
   const verify2FA = async () => {
     if (!twoFactorData.verificationCode) {
       setError('Please enter the verification code');
@@ -107,31 +101,25 @@ const AccountSettings = () => {
         verificationCode: ''
       }));
       setMessage('2FA enabled successfully! Please save your backup codes.');
-    } catch (error) {
-      setError(error.response?.data?.error || 'Invalid verification code');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Invalid verification code');
     } finally {
       setTwoFactorLoading(false);
     }
   };
 
-  // Disable 2FA
   const disable2FA = async () => {
     if (!window.confirm('Are you sure you want to disable 2FA? This will make your account less secure.')) {
       return;
     }
     
-    // Get password confirmation
     const password = prompt('Please enter your password to confirm disabling 2FA:');
-    if (!password) {
-      return;
-    }
+    if (!password) return;
     
     setTwoFactorLoading(true);
     setError('');
     try {
-      await makeAuthenticatedRequest('post', '/api/two-factor/disable', {
-        password // Add password to the request
-      });
+      await makeAuthenticatedRequest('post', '/api/two-factor/disable', { password });
       setTwoFactorData(prev => ({
         ...prev,
         enabled: false,
@@ -141,51 +129,13 @@ const AccountSettings = () => {
         showSetup: false,
         showBackupCodes: false
       }));
-      setMessage('2FA has been disabled successfully.'); // This message should now appear
-    } catch (error) {
-      setError(error.response?.data?.error || 'Failed to disable 2FA');
+      setMessage('2FA has been disabled successfully.');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to disable 2FA');
     } finally {
       setTwoFactorLoading(false);
     }
   };
-
-  // Password validation function
-  const validatePassword = (password) => {
-    return {
-      hasUppercase: /[A-Z]/.test(password),
-      hasLowercase: /[a-z]/.test(password),
-      hasNumber: /\d/.test(password),
-      hasSpecialChar: /[@$!%*?&]/.test(password),
-      hasMinLength: password.length >= 8
-    };
-  };
-
-  // Check if password meets all requirements
-  const isPasswordValid = (validation) => {
-    return Object.values(validation).every(Boolean);
-  };
-
-  // Check if passwords match
-  useEffect(() => {
-    if (passwordResetData.newPassword && passwordResetData.confirmPassword) {
-      const match = passwordResetData.newPassword === passwordResetData.confirmPassword;
-      setPasswordsMatch(match);
-      setShowPasswordMatchIndicators(true);
-    } else {
-      setShowPasswordMatchIndicators(false);
-      setPasswordsMatch(false);
-    }
-  }, [passwordResetData.newPassword, passwordResetData.confirmPassword]);
-
-  useEffect(() => {
-    if (passwordResetData.newPassword) {
-      const validation = validatePassword(passwordResetData.newPassword);
-      setPasswordValidation(validation);
-      setShowPasswordRequirements(true);
-    } else {
-      setShowPasswordRequirements(false);
-    }
-  }, [passwordResetData.newPassword]);
 
   const handlePasswordReset = async (e) => {
     e.preventDefault();
@@ -193,14 +143,12 @@ const AccountSettings = () => {
     setError('');
     setMessage('');
   
-    // Validate passwords match
     if (passwordResetData.newPassword !== passwordResetData.confirmPassword) {
       setError('New passwords do not match');
       setLoading(false);
       return;
     }
   
-    // Validate password strength using the validation function
     const validation = validatePassword(passwordResetData.newPassword);
     if (!isPasswordValid(validation)) {
       setError('Password must meet all the requirements shown below');
@@ -209,7 +157,7 @@ const AccountSettings = () => {
     }
   
     try {
-      const response = await makeAuthenticatedRequest('put', '/api/auth/reset-password', {
+      await makeAuthenticatedRequest('put', '/api/auth/reset-password', {
         currentPassword: passwordResetData.currentPassword,
         newPassword: passwordResetData.newPassword
       });
@@ -218,24 +166,14 @@ const AccountSettings = () => {
       setPasswordResetData({ currentPassword: '', newPassword: '', confirmPassword: '' });
       setShowPasswordReset(false);
       
-      // Check if backend requires re-authentication
-      if (response.data.requireReauth) {
-        // Auto-logout immediately since backend cleared the cookie
-        setTimeout(() => {
-          logout();
-          navigate('/login');
-        }, 2000);
-      } else {
-        // Fallback: logout after successful password change anyway
-        setTimeout(() => {
-          logout();
-          navigate('/login');
-        }, 2000);
-      }
+      setTimeout(() => {
+        logout();
+        navigate('/login');
+      }, 2000);
       
-    } catch (error) {
-      console.error('Password reset error:', error);
-      setError(error.response?.data?.message || 'Failed to update password. Please try again.');
+    } catch (err) {
+      console.error('Password reset error:', err);
+      setError(err.response?.data?.message || 'Failed to update password. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -436,7 +374,7 @@ const AccountSettings = () => {
                     <ul className="requirements-list">
                       <li className={passwordValidation.hasMinLength ? 'valid' : 'invalid'}>
                         <i className={passwordValidation.hasMinLength ? 'fas fa-check' : 'fas fa-times'}></i>
-                        At least 8 characters
+                        At least 12 characters
                       </li>
                       <li className={passwordValidation.hasUppercase ? 'valid' : 'invalid'}>
                         <i className={passwordValidation.hasUppercase ? 'fas fa-check' : 'fas fa-times'}></i>
@@ -452,7 +390,7 @@ const AccountSettings = () => {
                       </li>
                       <li className={passwordValidation.hasSpecialChar ? 'valid' : 'invalid'}>
                         <i className={passwordValidation.hasSpecialChar ? 'fas fa-check' : 'fas fa-times'}></i>
-                        One special character (@$!%*?&)
+                        One special character (!@#$%^&*(),.?":{}|&lt;&gt;)
                       </li>
                     </ul>
                   </div>
@@ -501,8 +439,6 @@ const AccountSettings = () => {
                     setShowPasswordReset(false);
                     setPasswordResetData({ currentPassword: '', newPassword: '', confirmPassword: '' });
                     setError('');
-                    setShowPasswordRequirements(false);
-                    setShowPasswordMatchIndicators(false);
                   }}
                 >
                   Cancel

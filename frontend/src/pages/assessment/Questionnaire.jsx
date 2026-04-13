@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { makeUnauthenticatedRequest, makeAuthenticatedRequest } from '../utils/csrf';
+import { makeUnauthenticatedRequest, makeAuthenticatedRequest } from '../../utils/csrf';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import '../QuestionnaireStyles.css';
-import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../../context/AuthContext';
+import './QuestionnaireStyles.css';
+import { useLanguage } from '../../context/LanguageContext';
 
 const PROGRESS_KEY = 'assessmentProgress';
 
@@ -62,11 +62,9 @@ function Questionnaire() {
       const raw = sessionStorage.getItem(PROGRESS_KEY);
       if (!raw) return null;
       const saved = JSON.parse(raw);
-      // Only restore if there is meaningful progress (at least 1 answer) and not too stale (2 hours)
       if (saved && saved.count > 0 && saved.question && (Date.now() - saved.savedAt) < 2 * 60 * 60 * 1000) {
         return saved;
       }
-      // Stale progress — clear it
       sessionStorage.removeItem(PROGRESS_KEY);
       return null;
     } catch {
@@ -83,7 +81,6 @@ function Questionnaire() {
     const newCount = count + 1;
     setCount(newCount);
     
-    // Legacy client-side tracking (kept for compatibility if needed, but logic moved to backend)
     const opt = question.options.find((o) => o.value === answer);
     const riskScore = opt?.riskScore ?? 0;
     const catShort = question.category.startsWith('Phishing') ? 'PHISH'
@@ -117,7 +114,6 @@ function Questionnaire() {
         }
         return;
       } catch (e) {
-        // Save progress so user can retry submission
         saveProgress({ responses: newResponses, answeredIds: newAnswered, count: newCount });
         navigate('/assessment-results', { state: { result: null } });
         return;
@@ -132,7 +128,6 @@ function Questionnaire() {
         answeredCodeIds: newAnswered,
         count: newCount,
         state: currentState,
-        // Legacy params
         probedCategories,
         vulnerabilityTopics,
       });
@@ -149,7 +144,6 @@ function Questionnaire() {
       setQuestionHistory(newHistory);
       setTransitioning(false);
 
-      // Persist progress after each answer
       saveProgress({
         responses: newResponses,
         answeredIds: newAnswered,
@@ -159,7 +153,6 @@ function Questionnaire() {
         questionHistory: newHistory,
       });
     } catch (e) {
-      // Save what we have so far even on fetch failure
       saveProgress({ responses: newResponses, answeredIds: newAnswered, count: newCount });
       setError(t('failed_fetch_next'));
       setTransitioning(false);
@@ -168,7 +161,6 @@ function Questionnaire() {
 
   const recomputeFromResponses = (list) => {
     const probed = { PHISH: false, SCAM: false, PASS: false, MAL: false, DATA: false, SOC: false };
-    const vuln = [];
     list.forEach((r) => {
       const catShort = r.category.startsWith('Phishing') ? 'PHISH'
         : r.category.startsWith('Scams') ? 'SCAM'
@@ -179,7 +171,7 @@ function Questionnaire() {
       if (catShort && probed[catShort] === false) probed[catShort] = true;
     });
     setProbedCategories(probed);
-    setVulnerabilityTopics(vuln);
+    setVulnerabilityTopics([]);
   };
 
   const handleBack = () => {
@@ -198,7 +190,6 @@ function Questionnaire() {
       const prevSel = newResponses[newCount - 1]?.answer || null;
       setCurrentSelection(prevSel);
     }
-    // Save progress after going back
     saveProgress({ responses: newResponses, answeredIds: newAnswered, count: newCount, question: prevQ });
   };
 
@@ -226,7 +217,6 @@ function Questionnaire() {
       }
     } catch {}
 
-    // Try to restore saved progress
     const saved = loadSavedProgress();
     if (saved) {
       setResponses(saved.responses || []);
@@ -242,12 +232,10 @@ function Questionnaire() {
       setCurrentSelection(null);
       setResumed(true);
       setLoading(false);
-      // Clear the resumed indicator after a short delay
       setTimeout(() => setResumed(false), 3000);
       return;
     }
 
-    // No saved progress — start fresh
     const loadFirst = async () => {
       try {
         const res = await makeUnauthenticatedRequest('post', '/api/assessment/next', {
