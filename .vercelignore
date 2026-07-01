@@ -1,7 +1,0 @@
-# Vercel Ignore file for root
-.git
-.env
-.env.*
-node_modules
-tests
-scripts

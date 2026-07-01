@@ -32,9 +32,9 @@ frontend/coverage/
 .idea/
 Thumbs.db
 
-# Vercel
-.vercel/
-frontend/.vercel/
+# Azure
+.azure/
+frontend/.azure/
 
 # AI / IDE config
 .trae/

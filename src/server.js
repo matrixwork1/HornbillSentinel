@@ -21,8 +21,8 @@ const { csrfProtection, getCSRFToken } = require('./middleware/csrf');
 
 const app = express();
 
-// Trust proxy (required for Cloud Run / reverse proxies)
-// This ensures secure cookies work behind Cloud Run's load balancer
+// Trust proxy (required for Azure App Service / reverse proxies)
+// This ensures secure cookies work behind Azure's load balancer
 app.set('trust proxy', 1);
 
 // HTTPS enforcement middleware (for production)
@@ -185,9 +185,8 @@ const corsOptions = {
     if (!origin) return callback(null, true);
     // Check exact match against allowed origins
     if (allowedOrigins.includes(origin)) return callback(null, true);
-    // Allow Vercel preview deployment URLs (pattern: *-<project>.vercel.app)
-    // Only allow Vercel preview deployments for this specific project
-    if (/^https:\/\/[a-z0-9-]+-hornbillsentinel[a-z0-9-]*\.vercel\.app$/.test(origin)) return callback(null, true);
+    // Allow Azure Static Web Apps preview deployment URLs
+    if (/^https:\/\/[a-z0-9-]+\.azurestaticapps\.net$/.test(origin)) return callback(null, true);
     return callback(new Error('Not allowed by CORS'));
   },
   credentials: true,

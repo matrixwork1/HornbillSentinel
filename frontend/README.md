@@ -35,4 +35,4 @@ npm start
 npm run build
 ```
 
-Output is in the `build/` directory, ready for static hosting (e.g. Vercel, Netlify).
+Output is in the `build/` directory, ready for static hosting (e.g. Azure Static Web Apps).

@@ -9,7 +9,7 @@ const { sendResetEmail, sendOTPEmail } = require('../utils/email');
 const crypto = require('crypto');
 const auth = require('../middleware/auth');
 
-// Cross-origin cookie setting: 'none' in production (Vercel → Cloud Run), 'strict' in dev
+// Cross-origin cookie setting: 'none' in production (cross-origin frontend → backend), 'strict' in dev
 const sameSiteValue = process.env.NODE_ENV === 'production' ? 'none' : 'strict';
 // Import validation middleware
 const { validate, registerSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema } = require('../middleware/validation');
